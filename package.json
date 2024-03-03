@@ -1,0 +1,45 @@
+{
+  "name": "create-api",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module", 
+  "main": "./src/app.js",
+  "scripts": {
+    "dev": "nodemon ./src/app.js",
+    "test": "jest",
+    "start": "node ./src/app.js"
+  },
+  "keywords": [
+    "javascript",
+    "auth",
+    "jwt"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "flask": "^0.2.10",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.0",
+    "pg": "^8.11.3",
+    "dotenv": "^16.4.5",
+    "swagger-ui-express": "^5.0.0",
+    "valibot": "^0.29.0",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.3.4",
+    "eslint": "^8.56.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1"
+  }
+}
