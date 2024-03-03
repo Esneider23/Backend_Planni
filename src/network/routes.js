@@ -1,10 +1,10 @@
 import { Router }from 'express';
-import { testRouter } from '../components/registry/network.js';
+import { signUpRouter } from '../components/sig-up/network.js';
 
 
 export const router = (app) => {
     const router = Router();
-    router.use('/', testRouter)
+    router.use('/', signUpRouter)
 
     app.use('/planni/sign-up', router)
 }
