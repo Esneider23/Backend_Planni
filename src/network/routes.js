@@ -6,5 +6,5 @@ export const router = (app) => {
     const router = Router();
     router.use('/', testRouter)
 
-    app.use('/api/v1', router)
+    app.use('/planni/sign-up', router)
 }

@@ -3,6 +3,6 @@ import { registryUserClient } from './controller.js'
 
 const testRouter = Router()
 
-testRouter.post('/test', registryUserClient)
+testRouter.post('/sign-up', registryUserClient)
 
 export { testRouter }
