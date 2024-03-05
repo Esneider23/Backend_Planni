@@ -1,5 +1,4 @@
-import pkg from 'pg';
-import { env } from '../options/env.js'
+import pkg from 'pg'
 
 const client = new pkg.Client({
   host: process.env.DB_HOST,
@@ -9,7 +8,7 @@ const client = new pkg.Client({
   database: process.env.DB_DATABASE,
   ssl: {
     rejectUnauthorized: process.env.SSL_REJECT_UNAUTHORIZED,
-  }
+  },
 })
 
 const connect = async () => {
@@ -19,5 +18,5 @@ const connect = async () => {
 
 export const db = {
   connect,
-  client
+  client,
 }

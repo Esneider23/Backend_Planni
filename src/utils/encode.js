@@ -1,5 +1,5 @@
-const bcrypt = require('bcrypt')
 import { env } from '../options/env.js'
+const bcrypt = require('bcrypt')
 console.log(env.SALT_ROUNDS)
 const encrypt = async (pass) => {
   // decidimos el numero de rondas de hasting
