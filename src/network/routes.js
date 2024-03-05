@@ -1,5 +1,5 @@
 import { Router }from 'express';
-import { signUpRouter } from '../components/sig-up/network.js';
+import { signUpRouter } from '../components/sing-up/network.js';
 
 
 export const router = (app) => {
