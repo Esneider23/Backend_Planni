@@ -65,11 +65,11 @@ const generateRandomUsername = (email) => {
 
 const createUserClient = async (email, password, country) => {
   try {
-    const name_user = await name(email)
+    const nameUser = await name(email)
     const username = await generateRandomUsername(email)
     const query =
       'INSERT INTO users (username, name_user, id_country, email, password, id_rol) VALUES ($1, $2, $3, $4, $5, $6)'
-    const values = [username, name_user, country, email, password, '3']
+    const values = [username, nameUser, country, email, password, '3']
     const { rowCount } = await client.query(query, values)
     console.log('[db] Created user', rowCount)
     return rowCount
@@ -82,28 +82,28 @@ const createUserClient = async (email, password, country) => {
 
 const createUserOtherType = async (
   username,
-  name_user,
-  lastname_user,
-  id_country,
+  nameUser,
+  lastnameUser,
+  idCountry,
   email,
   password,
   phone,
   addrees,
-  id_rol
+  idRol
 ) => {
   try {
     const query =
       'INSERT INTO users (username, name_user, lastname_user, id_country, email, password, phone, addrees, id_rol) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)'
     const values = [
       username,
-      name_user,
-      lastname_user,
-      id_country,
+      nameUser,
+      lastnameUser,
+      idCountry,
       email,
       password,
       phone,
       addrees,
-      id_rol,
+      idRol,
     ]
     const { rowCount } = await client.query(query, values)
     console.log('[db] Created user', rowCount)
@@ -115,11 +115,11 @@ const createUserOtherType = async (
   }
 }
 
-const consults_supplier = async (name_supplier, email, nit_supplier) => {
+const consultsSupplier = async (nameSupplier, email, nitSupplier) => {
   try {
     const query =
       'SELECT * FROM suppliers WHERE name_supplier = $1 OR email = $2 OR nit_supplier = $3'
-    const values = [name_supplier, email, nit_supplier]
+    const values = [nameSupplier, email, nitSupplier]
     const { rows } = await client.query(query, values)
     console.log('[db] Consulted supplier', rows[0])
     return rows
@@ -133,5 +133,5 @@ export const consults = {
   getUser,
   createUserClient,
   createUserOtherType,
-  consults_supplier
+  consultsSupplier,
 }
