@@ -3,7 +3,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import { router } from './network/routes.js';
 import { corsOptions } from './options/cors.js';
-import {server} from './utilis/server.js';
+import {server} from './utils/server.js';
 
 const app = express();
 
