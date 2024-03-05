@@ -1,10 +1,11 @@
 import { response } from '../../network/response.js'
-import { hashPassword } from '../../utils/hash.js'
+import { hashPassword } from '../../utils/bcrypt/hashPassword.js'
 import { consults } from '../../db/consults.js'
 
-export const registryUserClient = async (req, res) => {
+const registryUserClient = async (req, res) => {
   try {
     const { password, password_conf: passwordConf, email, country } = req.body
+
     if (password !== passwordConf) {
       response.error(
         res,
@@ -28,7 +29,7 @@ export const registryUserClient = async (req, res) => {
   }
 }
 
-export const registryOtherUserType = async (req, res) => {
+const registryOtherUserType = async (req, res) => {
   try {
     const {
       username,
@@ -39,7 +40,7 @@ export const registryOtherUserType = async (req, res) => {
       password,
       phone,
       addrees,
-      id_rol: idRol,
+      id_rol: idRol
     } = req.body
 
     const hashedPassword = await hashPassword(password)
@@ -67,7 +68,7 @@ export const registryOtherUserType = async (req, res) => {
   }
 }
 
-export const registrySupplierUser = async (req, res) => {
+const registrySupplierUser = async (req, res) => {
   try {
     const {
       name_supplier: nameSupplier,
@@ -76,7 +77,7 @@ export const registrySupplierUser = async (req, res) => {
       id_country_supplier: idCountrySupplier,
       addres_supplier: addresSupplier,
       phone_supplier: phoneSupplier,
-      id_type_supplier: idTypeSupplier,
+      id_type_supplier: idTypeSupplier
     } = res.body
 
     const responseDB = await consults.consults_supplier(
@@ -104,3 +105,5 @@ export const registrySupplierUser = async (req, res) => {
     response.error(res, error.message)
   }
 }
+
+export { registryUserClient, registryOtherUserType, registrySupplierUser }

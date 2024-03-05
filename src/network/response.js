@@ -3,7 +3,7 @@ const success = (res, message, data, status = 200) => {
     success: true,
     message,
     data,
-    status,
+    status
   })
 }
 
@@ -11,11 +11,11 @@ const error = (res, message, status = 400) => {
   res.status(status).json({
     success: false,
     message,
-    status,
+    status
   })
 }
 
 export const response = {
   success,
-  error,
+  error
 }

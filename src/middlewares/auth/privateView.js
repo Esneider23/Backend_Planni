@@ -1,11 +1,10 @@
-import { env } from '../options/env.js'
-const jwt = require('jsonwebtoken')
+import { env } from '../../options/env.js'
+import jwt from 'jsonwebtoken'
 
 const SECRET_KEY = env.SECRET_KEY
 
 // Middleware para verificar la validez del token
 export const privateView = (req, res, next) => {
-  /* const token = req.header('Authorization'); */
   const token = req.cookies.token
 
   if (!token) {

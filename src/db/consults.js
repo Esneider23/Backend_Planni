@@ -1,4 +1,6 @@
 import { db } from './conect.js'
+import { compareHash } from '../utils/bcrypt/compareHash.js'
+
 const client = db.client
 
 const getUser = async (email) => {
@@ -103,7 +105,7 @@ const createUserOtherType = async (
       password,
       phone,
       addrees,
-      idRol,
+      idRol
     ]
     const { rowCount } = await client.query(query, values)
     console.log('[db] Created user', rowCount)
@@ -129,9 +131,71 @@ const consultsSupplier = async (nameSupplier, email, nitSupplier) => {
   }
 }
 
+// Codigo de api auth planni
+
+const createUser = async (
+  username,
+  name,
+  lastName,
+  country,
+  email,
+  password
+) => {
+  const query = {
+    text: 'INSERT INTO users (username, name_user, lastname_user, id_country, email, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id_users',
+    values: [username, name, lastName, country, email, password]
+  }
+  const { rows } = await client.query(query)
+  return rows[0].id_users
+}
+
+const getUserByUsername = async (username) => {
+  const query = {
+    text: 'SELECT id_users, username, name_user, lastname_user, id_country, email FROM users WHERE username = $1',
+    values: [username]
+  }
+  const { rows } = await client.query(query)
+  return rows[0] || null
+}
+
+const getUserById = async (id) => {
+  const query = {
+    text: 'SELECT id_users, username, name_user, lastname_user, id_country, email FROM users WHERE id_users = $1',
+    values: [id]
+  }
+  const { rows } = await client.query(query)
+  return rows[0] || null
+}
+
+const validateUser = async (username, password) => {
+  const query = {
+    text: 'SELECT id_users, username, password FROM users WHERE username = $1',
+    values: [username]
+  }
+  const { rows } = await client.query(query)
+
+  if (rows.length === 0) {
+    return null // No existe
+  }
+
+  const storedPassword = rows[0].password
+  const passMatches = await compareHash(password, storedPassword)
+
+  if (passMatches) {
+    return true
+  } else {
+    return null // No coinciden
+  }
+}
+
 export const consults = {
   getUser,
   createUserClient,
   createUserOtherType,
   consultsSupplier,
+  // Codigo de la api auth planni
+  createUser,
+  getUserByUsername,
+  getUserById,
+  validateUser
 }
