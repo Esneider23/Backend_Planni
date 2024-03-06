@@ -1,5 +1,5 @@
-import { env } from '../options/env.js'
-const jwt = require('jsonwebtoken')
+import { env } from '../../options/env.js'
+import jwt from 'jsonwebtoken'
 
 const SECRET_KEY = env.SECRET_KEY
 

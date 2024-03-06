@@ -7,8 +7,8 @@ const client = new pkg.Client({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   ssl: {
-    rejectUnauthorized: process.env.SSL_REJECT_UNAUTHORIZED,
-  },
+    rejectUnauthorized: process.env.SSL_REJECT_UNAUTHORIZED
+  }
 })
 
 const connect = async () => {
@@ -18,5 +18,5 @@ const connect = async () => {
 
 export const db = {
   connect,
-  client,
+  client
 }

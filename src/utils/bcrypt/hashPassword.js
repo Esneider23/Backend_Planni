@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt'
-import { env } from '../options/env.js'
+import { env } from '../../options/env.js'
 
 // Función para encriptar una contraseña
-export const hashPassword = async (password) => {
+const hashPassword = async (password) => {
   // Generar una sal
   const saltRounds = parseInt(env.SALT_ROUNDS) // Número de rondas de hashing
   const salt = await bcrypt.genSalt(saltRounds)
@@ -12,3 +12,5 @@ export const hashPassword = async (password) => {
 
   return hashedPassword
 }
+
+export { hashPassword }
