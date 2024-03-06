@@ -1,13 +1,14 @@
 import pkg from 'pg'
+import { env } from '../options/env.js'
 
 const client = new pkg.Client({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  port: process.env.DB_PORT,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
+  host: env.DB_HOST,
+  user: env.DB_USER,
+  port: env.DB_PORT,
+  password: env.DB_PASSWORD,
+  database: env.DB_DATABASE,
   ssl: {
-    rejectUnauthorized: process.env.SSL_REJECT_UNAUTHORIZED
+    rejectUnauthorized: env.SSL_REJECT_UNAUTHORIZED
   }
 })
 
