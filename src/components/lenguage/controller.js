@@ -20,11 +20,13 @@ const lenguageProcess = async (data_city, data_user) => {
 }
 
 const listActivity = (data) => {
-    const keys = key.key
-    const actions = action.action
-    const placesAndActions = keys.concat(actions).filter(palabra => data.includes(palabra))
-    console.log(placesAndActions)
-    return placesAndActions
+  const keys = key.key
+  const actions = action.action
+  const placesAndActions = keys
+    .concat(actions)
+    .filter((palabra) => data.includes(palabra))
+  console.log(placesAndActions)
+  return placesAndActions
 }
 
 export const getActivity = async (req, res) => {
@@ -37,9 +39,12 @@ export const getActivity = async (req, res) => {
     if (!cityInfo) {
       response.error(res, 'Ciudad no encontrada', 404)
     } else {
-        const activities = await lenguageProcess(cityInfo, context_user)
-        const toTodo = listActivity(activities)
-        response.success(res, 'Actividades encontradas', toTodo, 200)
+      if (context_user === undefined) {
+        response.error(res, 'Falta el contexto del usuario', 400)
+      }
+      const activities = await lenguageProcess(cityInfo, context_user)
+      const toTodo = listActivity(activities)
+      response.success(res, 'Actividades encontradas', toTodo, 200)
     }
   } catch (error) {
     response.error(res, error.message, 500)
