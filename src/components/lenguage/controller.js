@@ -19,14 +19,13 @@ const lenguageProcess = async (data_city, data_user) => {
   return answer.answer
 }
 
-const listActivity = (data) => {
+const listActivity = async (data) => {
   const keys = key.key
   const action = actions.actions
-
   const placesAndActions = keys
-    .concat(actions)
+    .concat(action)
     .filter((palabra) => data.includes(palabra))
-  console.log('Places and Actions:', placesAndActions)
+  console.log(placesAndActions)
   return placesAndActions
 }
 
