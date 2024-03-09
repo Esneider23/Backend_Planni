@@ -1,7 +1,7 @@
 import { response } from '../../network/response.js'
 import city from './json/context-city.json' assert { type: 'json' }
 import key from './json/key.json' assert { type: 'json' }
-import action from './json/action.json' assert { type: 'json' }
+import actions from './json/action.json' assert { type: 'json' }
 import { pipeline } from '@xenova/transformers'
 
 const searchCity = (cityData, cityName) => {
@@ -21,11 +21,12 @@ const lenguageProcess = async (data_city, data_user) => {
 
 const listActivity = (data) => {
   const keys = key.key
-  const actions = action.action
+  const action = actions.actions
+
   const placesAndActions = keys
     .concat(actions)
     .filter((palabra) => data.includes(palabra))
-  console.log(placesAndActions)
+  console.log('Places and Actions:', placesAndActions)
   return placesAndActions
 }
 
@@ -43,7 +44,7 @@ export const getActivity = async (req, res) => {
         response.error(res, 'Falta el contexto del usuario', 400)
       }
       const activities = await lenguageProcess(cityInfo, context_user)
-      const toTodo = listActivity(activities)
+      const toTodo = await listActivity(activities)
       response.success(res, 'Actividades encontradas', toTodo, 200)
     }
   } catch (error) {
