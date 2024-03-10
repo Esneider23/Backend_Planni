@@ -3,6 +3,6 @@ import { getActivity } from './controller.js'
 
 const lenguageRouter = Router()
 
-lenguageRouter.get('/getActivity', getActivity)
+lenguageRouter.post('/getActivity', getActivity)
 
 export { lenguageRouter }
