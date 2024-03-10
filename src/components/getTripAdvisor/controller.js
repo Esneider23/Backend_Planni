@@ -19,11 +19,9 @@ const consumDeberta = async (req, res) => {
 }
 
 export const getTrip = async (req, res) => {
-    const lyri = ["centro", "snorkel"]
-    const stringWords = lyri.join(', ');
-
     try {
         const infoDeberta = await consumDeberta();
+        const stringWords = infoDeberta.join(', ')
         console.log(infoDeberta);
         const api = await axios.get('https://api.content.tripadvisor.com/api/v1/location/search', {
             params: {
