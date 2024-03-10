@@ -15,5 +15,6 @@ export const env = {
   TIME_TOKEN: process.env.TIME_TOKEN,
   SALT_ROUNDS: process.env.SALT_ROUNDS,
   SECRET_KEY: process.env.SECRET_KEY,
-  KEY_TRIPADVISOR: process.env.KEY_TRIPADVISOR
+  KEY_TRIPADVISOR: process.env.KEY_TRIPADVISOR,
+  HOST_PRODUCTION: process.env.HOST_PRODUCTION
 }
