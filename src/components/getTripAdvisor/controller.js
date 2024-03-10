@@ -3,21 +3,25 @@ import { env } from '../../options/env.js'
 import { response } from '../../network/response.js'
 
 export const getTrip = async (req, res) => {
+    const lyri = ["centro", "snorkel"]
+    const stringWords = lyri.join(', ');
+
     try {
-        const api = await axios.get('https://api.content.tripadvisor.com/api/v1/location/search', {
+        const api = await axios.get('https://api.content.tripadvisor.com/api/v1/location/nearby_search', {
             params: {
-                searchQuery: 'snorkel en cartagena',
+                latLong: '10.4258988,-75.5496305,17',
+                searchQuery: stringWords,
                 key: env.KEY_TRIPADVISOR,
-                category: 'hotels',
-                radius: '7.90',
-                radiusUnit: 'm',
-                language: 'es_Col'
-            },
+                radius: '7.9',
+                radiusUnit: 'km',
+                language: 'es_CO'
+              },
             headers: {
                 accept: 'application/json'
             }
         });
-        response.success(res, 'TripAdvisor API', api.data, 200)
+        const numberSite = api.data.data.length;
+        response.success(res, `TripAdvisor API [ ${stringWords} ] | Number of searched sites: ${numberSite}`, api.data, 200)
     } catch (error) {
         console.error("Ha ocurrido un error:", error);
         throw error;
