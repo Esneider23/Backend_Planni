@@ -3,13 +3,13 @@ import { env } from '../../options/env.js';
 import { response } from '../../network/response.js';
 
 const baseURL = env.NODE_ENV === 'production' ? env.HOST_PRODUCTION : env.HOST_API;
-const consumDeberta = async (requestData) => { // Añade un parámetro para recibir el objeto req
+const consumDeberta = async (requestData) => {
     try {
         const responseData = await axios.post(`${baseURL}/planni/lenguage/getActivity`, requestData); // Utiliza el objeto recibido
         return responseData.data.data.activities.map(activity => `${activity} ${requestData.cityName}`);
     } catch (error) {
         console.error('Error al obtener las actividades:', error);
-        throw error; // Puedes considerar lanzar el error para manejarlo en la función getTrip
+        throw error;
     }
 }
 
@@ -23,7 +23,7 @@ export const getTrip = async (req, res) => {
             context_user: contextUser
         };
 
-        const infoDeberta = await consumDeberta(requestData); // Pasa el objeto req a la función
+        const infoDeberta = await consumDeberta(requestData);
         const stringWords = infoDeberta.join(', ');
         console.log(stringWords);
         const category = ['hotels','restaurants', 'attractions'];
