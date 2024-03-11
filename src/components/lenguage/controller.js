@@ -22,7 +22,9 @@ const lenguageProcess = async (data_city, data_user) => {
 const listActivity = async (data) => {
   const keys = key.key
   const action = actions.actions
-  const placesAndActions = keys.concat(action).filter((palabra) => data.includes(palabra))
+  const placesAndActions = keys
+    .concat(action)
+    .filter((palabra) => data.includes(palabra))
   return placesAndActions
 }
 
@@ -41,7 +43,12 @@ export const getActivity = async (req, res) => {
       }
       const activities = await lenguageProcess(cityInfo, context_user)
       const toTodo = await listActivity(activities)
-      response.success(res, 'Actividades encontradas', { activities: toTodo }, 200)
+      response.success(
+        res,
+        'Actividades encontradas',
+        { activities: toTodo },
+        200
+      )
     }
   } catch (error) {
     response.error(res, error.message, 500)
