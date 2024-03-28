@@ -1,0 +1,153 @@
+{
+  "location_id": "1181044",
+  "name": "Isla del Pirata",
+  "web_url": "https://www.tripadvisor.co/Hotel_Review-g297476-d1181044-Reviews-Isla_del_Pirata-Cartagena_Cartagena_District_Bolivar_Department.html?m=66827",
+  "address_obj": {
+    "street1": "Calle de la Factoría, Cra. 3 # 36 – 04",
+    "street2": "Centro",
+    "city": "Cartagena",
+    "country": "Colombia",
+    "postalcode": "130019",
+    "address_string": "Calle de la Factoría, Cra. 3 # 36 – 04 Centro, Cartagena 130019 Colombia"
+  },
+  "ancestors": [
+    {
+      "level": "City",
+      "name": "Cartagena",
+      "location_id": "297476"
+    },
+    {
+      "level": "District",
+      "name": "Distrito de Cartagena",
+      "location_id": "3874559"
+    },
+    {
+      "level": "Department",
+      "name": "Departamento de Bolívar",
+      "location_id": "2437760"
+    },
+    {
+      "level": "Country",
+      "name": "Colombia",
+      "location_id": "294073"
+    }
+  ],
+  "latitude": "10.425075",
+  "longitude": "-75.55192",
+  "timezone": "America/Bogota",
+  "write_review": "https://www.tripadvisor.co/UserReview-g297476-d1181044-Isla_del_Pirata-Cartagena_Cartagena_District_Bolivar_Department.html?m=66827",
+  "ranking_data": {
+    "geo_location_id": "297476",
+    "ranking_string": "N.º 15 de 565 otros alojamientos en Cartagena",
+    "geo_location_name": "Cartagena",
+    "ranking_out_of": "565",
+    "ranking": "15"
+  },
+  "rating": "4.0",
+  "rating_image_url": "https://www.tripadvisor.co/img/cdsi/img2/ratings/traveler/4.0-66827-5.svg",
+  "num_reviews": "402",
+  "review_rating_count": {
+    "1": "41",
+    "2": "37",
+    "3": "47",
+    "4": "113",
+    "5": "164"
+  },
+  "subratings": {
+    "0": {
+      "name": "rate_location",
+      "localized_name": "Ubicación",
+      "rating_image_url": "https://static.tacdn.com/img2/ratings/traveler/ss4.5.svg",
+      "value": "4.5"
+    },
+    "1": {
+      "name": "rate_sleep",
+      "localized_name": "Calidad del descanso",
+      "rating_image_url": "https://static.tacdn.com/img2/ratings/traveler/ss4.0.svg",
+      "value": "4.0"
+    },
+    "2": {
+      "name": "rate_room",
+      "localized_name": "Habitaciones",
+      "rating_image_url": "https://static.tacdn.com/img2/ratings/traveler/ss3.5.svg",
+      "value": "3.5"
+    },
+    "3": {
+      "name": "rate_service",
+      "localized_name": "Servicio",
+      "rating_image_url": "https://static.tacdn.com/img2/ratings/traveler/ss4.0.svg",
+      "value": "4.0"
+    },
+    "4": {
+      "name": "rate_value",
+      "localized_name": "Calidad/precio",
+      "rating_image_url": "https://static.tacdn.com/img2/ratings/traveler/ss3.5.svg",
+      "value": "3.5"
+    },
+    "5": {
+      "name": "rate_cleanliness",
+      "localized_name": "Limpieza",
+      "rating_image_url": "https://static.tacdn.com/img2/ratings/traveler/ss3.5.svg",
+      "value": "3.5"
+    }
+  },
+  "photo_count": "504",
+  "see_all_photos": "https://www.tripadvisor.co/Hotel_Review-g297476-d1181044-m66827-Reviews-Isla_del_Pirata-Cartagena_Cartagena_District_Bolivar_Department.html#photos",
+  "price_level": "$$",
+  "amenities": [
+    "Frente al mar",
+    "Suites",
+    "Restaurante",
+    "Bar/Salón",
+    "Desayuno incluido",
+    "Español",
+    "Acceso a la playa",
+    "Habitaciones para familias",
+    "Seguro",
+    "Baño/Ducha",
+    "Buceo",
+    "Inglés",
+    "Recepción disponible las 24 horas",
+    "Tumbonas/Sillas playeras"
+  ],
+  "category": {
+    "name": "hotel",
+    "localized_name": "Hotel"
+  },
+  "subcategory": [
+    {
+      "name": "other",
+      "localized_name": "Specialty Lodging"
+    }
+  ],
+  "styles": ["Vista al puerto", "Hoteles peculiares"],
+  "neighborhood_info": [],
+  "trip_types": [
+    {
+      "name": "business",
+      "localized_name": "De negocios",
+      "value": "0"
+    },
+    {
+      "name": "couples",
+      "localized_name": "Pareja",
+      "value": "193"
+    },
+    {
+      "name": "solo",
+      "localized_name": "Solo",
+      "value": "13"
+    },
+    {
+      "name": "family",
+      "localized_name": "Familia",
+      "value": "77"
+    },
+    {
+      "name": "friends",
+      "localized_name": "Con amigos",
+      "value": "76"
+    }
+  ],
+  "awards": []
+}
