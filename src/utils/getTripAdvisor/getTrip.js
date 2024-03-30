@@ -42,3 +42,24 @@ export const getTrip = async (cityNames, contextUser) => {
     throw error
   }
 }
+
+export const getTripUrl = async (locationId) => {
+  try {
+    const api = await axios.get(
+      `https://api.content.tripadvisor.com/api/v1/location/${locationId}/details`,
+      {
+        params: {
+          key: env.KEY_TRIPADVISOR,
+          language: 'es_CO'
+        },
+        headers: {
+          accept: 'application/json'
+        }
+      }
+    )
+    return api.data.web_url
+  } catch (error) {
+    console.error('Ha ocurrido un error:', error)
+    throw error
+  }
+}
