@@ -9,8 +9,27 @@ export const scrapeWebsite = async (req, res) => {
 
     // Obtener los primeros cuatro elementos de cada categoría
     const hotels = infoTrip.hotels.data.slice(0, 4)
-    const attractions = infoTrip.attractions.data.slice(0, 4)
     const restaurants = infoTrip.restaurants.data.slice(0, 4)
+
+    // Filtrar atracciones por nombre que contenga "tour"
+    const attractionsWithTour = infoTrip.attractions.data.filter((attraction) =>
+      attraction.name.toLowerCase().includes('tour')
+    )
+
+    // Tomar las primeras 4 atracciones con "tour"
+    let attractions = attractionsWithTour.slice(
+      0,
+      Math.min(4, attractionsWithTour.length)
+    )
+
+    // Si hay menos de 4 atracciones con "tour", completar con atracciones normales
+    const remainingAttractionsCount = 4 - attractions.length
+    if (remainingAttractionsCount > 0) {
+      const remainingAttractions = infoTrip.attractions.data
+        .filter((attraction) => !attraction.name.toLowerCase().includes('tour'))
+        .slice(0, remainingAttractionsCount)
+      attractions = attractions.concat(remainingAttractions)
+    }
 
     // Obtener las URLs de hoteles, atracciones y restaurantes de forma concurrente
     const [hotelUrls, attractionUrls, restaurantUrls] = await Promise.all([
