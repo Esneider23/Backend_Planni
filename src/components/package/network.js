@@ -3,6 +3,6 @@ import { scrapeWebsite } from './controller.js'
 
 const packageRouter = Router()
 
-packageRouter.get('/', scrapeWebsite)
+packageRouter.post('/', scrapeWebsite)
 
 export { packageRouter }

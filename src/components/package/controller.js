@@ -59,19 +59,4 @@ const getUrls = async (cityNames, contextUser) => {
         ])
       )
     }
-    return urlsByCategory
-  } catch (error) {
-    console.error('Ha ocurrido un error:', error)
-    throw error
-  }
-}
-
-export const scrapeWebsite = async (req, res) => {
-  try {
-    const { cityNames, contextUser } = req.body
-    const urlsByCategory = await getUrls(cityNames, contextUser)
-    response.success(res, urlsByCategory, 200)
-  } catch (error) {
-    response.error(res, error.message, 500)
-  }
 }
