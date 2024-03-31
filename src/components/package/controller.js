@@ -61,9 +61,9 @@ export const scrapeWebsite = async (req, res) => {
       )
     }
 
-    console.log(urlsByCategory)
+    response.success(res, 'Información obtenida', urlsByCategory)
   } catch (error) {
     console.error('Ha ocurrido un error:', error)
-    response.error('Ha ocurrido un error', error, 500)
+    response.error(res,'Ha ocurrido un error', error, 500)
   }
 }
