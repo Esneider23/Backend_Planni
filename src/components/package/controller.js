@@ -2,8 +2,7 @@ import puppeteer from 'puppeteer'
 import { response } from '../../network/response.js'
 import { getTrip, getTripUrl } from '../../utils/getTripAdvisor/getTrip.js'
 
-export const scrapeWebsite = async (req, res) => {
-  const { cityNames, contextUser } = req.body
+const getUrls = async (cityNames, contextUser) => {
   try {
     const infoTrip = await getTrip(cityNames, contextUser)
 
@@ -60,10 +59,4 @@ export const scrapeWebsite = async (req, res) => {
         ])
       )
     }
-
-    response.success(res, 'Información obtenida', urlsByCategory)
-  } catch (error) {
-    console.error('Ha ocurrido un error:', error)
-    response.error(res,'Ha ocurrido un error', error, 500)
-  }
 }
