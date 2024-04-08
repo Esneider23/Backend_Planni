@@ -1,6 +1,6 @@
-import puppeteer from 'puppeteer'
 import { response } from '../../network/response.js'
-import { getTrip, getTripUrl } from '../../utils/getTripAdvisor/getTrip.js'
+import { getTrip } from '../../utils/getTripAdvisor/getTrip.js'
+import { scrapeWebsiteGoogleHotels } from '../../utils/webScraping/scraping.js'
 
 const getUrls = async (cityNames, contextUser) => {
   try {
@@ -31,31 +31,31 @@ const getUrls = async (cityNames, contextUser) => {
     }
 
     // Obtener las URLs de hoteles, atracciones y restaurantes de forma concurrente
-    const [hotelUrls, attractionUrls, restaurantUrls] = await Promise.all([
-      Promise.all(hotels.map((hotel) => getTripUrl(hotel.location_id))),
+    const [hotelName, attractionName, restaurantName] = await Promise.all([
+      Promise.all(hotels.map((hotel) => hotel.name)),
       Promise.all(
-        attractions.map((attraction) => getTripUrl(attraction.location_id))
+        attractions.map((attraction) => attraction.name)
       ),
       Promise.all(
-        restaurants.map((restaurant) => getTripUrl(restaurant.location_id))
+        restaurants.map((restaurant) => restaurant.name)
       )
     ])
 
     // Almacenar las URLs en un diccionario por categoría
     const urlsByCategory = {
       hotels: Object.fromEntries(
-        hotels.map((hotel, index) => [hotel.location_id, hotelUrls[index]])
+        hotels.map((hotel, index) => [hotel.location_id, hotelName[index]])
       ),
       attractions: Object.fromEntries(
         attractions.map((attraction, index) => [
           attraction.location_id,
-          attractionUrls[index]
+          attractionName[index]
         ])
       ),
       restaurants: Object.fromEntries(
         restaurants.map((restaurant, index) => [
           restaurant.location_id,
-          restaurantUrls[index]
+          restaurantName[index]
         ])
       )
     }
@@ -69,7 +69,14 @@ export const scrapeWebsite = async (req, res) => {
   try {
     const { cityNames, contextUser } = req.body
     const urlsByCategory = await getUrls(cityNames, contextUser)
-    response.success(res, 'URLs obtenidas correctamente', urlsByCategory)
+    const hotels = urlsByCategory.hotels
+    const hotelPromises = Object.keys(hotels).map(async (locationId) => {
+      const hotelName = hotels[locationId]
+      const hotel = await scrapeWebsiteGoogleHotels(hotelName)
+      return { locationId, hotel }
+    })
+    const hotelPrices = await Promise.all(hotelPromises)
+    response.success(res, 'price of hotels', hotelPrices)
   } catch (error) {
     response.error(res, error)
   }

@@ -21,6 +21,7 @@
     "@xenova/transformers": "^2.16.0",
     "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
+    "cheerio": "^1.0.0-rc.12",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -30,6 +31,8 @@
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.3",
     "puppeteer": "^22.6.1",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "swagger-ui-express": "^5.0.0",
     "valibot": "^0.29.0",
     "yamljs": "^0.3.0"
