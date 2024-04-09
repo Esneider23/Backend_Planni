@@ -70,6 +70,7 @@ export const scrapeWebsite = async (req, res) => {
     const { cityNames, contextUser } = req.body
     const urlsByCategory = await getUrls(cityNames, contextUser)
     const hotels = urlsByCategory.hotels
+    console.log(hotels)
     const hotelPromises = Object.keys(hotels).map(async (locationId) => {
       const hotelName = hotels[locationId]
       const hotel = await scrapeWebsiteGoogleHotels(hotelName)

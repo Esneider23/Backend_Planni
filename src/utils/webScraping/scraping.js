@@ -21,28 +21,26 @@ export const scrapeWebsiteGoogleHotels = async (look) => {
   const html = await page.content()
   await browser.close()
 
+  const hotelsList = []
   const $ = cheerio.load(html)
 
-  let cheapestHotel = null // Almacenará el hotel más económico entre los tres primeros
-
   $('.uaTTDe').each((i, el) => {
-    if (i >= 3 || cheapestHotel) return // Salir del bucle si ya hemos evaluado los primeros tres hoteles o ya hemos encontrado el más económico
-
     const titleElement = $(el).find('.QT7m7 > h2')
     const priceElement = $(el).find('.kixHKb span').first()
-    const priceText = priceElement.text().trim()
 
-    if (/COP\s*\d/.test(priceText)) {
-      const numericPrice = parseInt(priceText.replace(/\D/g, ''), 10) // Convertir el precio a un número eliminando cualquier carácter no numérico
-      if (!cheapestHotel || numericPrice < cheapestHotel.price) {
-        cheapestHotel = sanitize({
-          title: titleElement.text(),
-          price: numericPrice
-        })
-      }
-    }
+    const hotelInfo = sanitize({
+      title: titleElement.text(),
+      price: priceElement.text()
+    })
+
+    hotelsList.push(hotelInfo)
   })
-  return cheapestHotel  // Devolver el hotel más económico
+
+  if (hotelsList.length > 0) {
+    return hotelsList[0]
+  } else {
+    console.log('{}')
+  } // Devolver el hotel más económico
 }
 
 export const scrapeWebsiteViator = async (look) => {
