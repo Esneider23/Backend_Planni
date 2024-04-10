@@ -16,36 +16,54 @@ export const scrapeWebsiteGoogleHotels = async (look) => {
     '.VfPpkd-LgbsSe[aria-label="Reject all"]'
   )
   if (buttonConsentReject) await buttonConsentReject.click()
-  await waitFor(3000)
+  await waitFor(3000) // Asegúrate de que `waitFor` está definida o usa page.waitForTimeout(3000).
 
   const html = await page.content()
   await browser.close()
 
-  const hotelsList = []
   const $ = cheerio.load(html)
+  let firstHotelFound = null // Usaremos null para manejar el caso en el que no se encuentren hoteles.
 
   $('.uaTTDe').each((i, el) => {
+    if (firstHotelFound) return false // Si ya encontramos un hotel, salimos del bucle.
+
     const titleElement = $(el).find('.QT7m7 > h2')
     const priceElement = $(el).find('.kixHKb span').first()
+    const priceText = priceElement.text().trim()
 
-    const hotelInfo = sanitize({
-      title: titleElement.text(),
-      price: priceElement.text()
-    })
-
-    hotelsList.push(hotelInfo)
+    // Asegúrate de que la expresión regular coincida con el formato de precio esperado
+    if (/^\$\s*\d{1,3}(\.\d{3})*$/.test(priceText)){
+      firstHotelFound = sanitize({
+        title: titleElement.text(),
+        price: priceText.replace(/\D/g, '') // Elimina todos los caracteres no numéricos para obtener solo el número.
+      })
+    }
   })
 
-  if (hotelsList.length > 0) {
-    return hotelsList[0]
+  if (!firstHotelFound) {
+    return null // Devuelve null si no se encontró ningún hotel
   } else {
-    console.log('{}')
-  } // Devolver el hotel más económico
+    return firstHotelFound // Devuelve el primer hotel encontrado
+  }
 }
 
-export const scrapeWebsiteViator = async (look) => {
-  const VIATOR_URL = `https://www.viator.com/es-CO/searchResults/all?text=${encodeURIComponent(look)}`
+/* export const scrapeWebsiteViator = async (look) => {
+  const VIATOR_URL = `https://www.getyourguide.es/s/?q=${look}&searchSource=3`
   const browser = await puppeteer.launch({ headless: true })
   const page = await browser.newPage()
+
+  await page.setJavaScriptEnabled(true);
   await page.goto(VIATOR_URL)
+
+  await page.waitForSelector('.vertical-activity-card__title');
+  
+
+  const title = await page.evaluate(() => {
+    const titleElement = document.querySelector('.vertical-activity-card__title');
+    return titleElement ? titleElement.textContent.trim() : null;
+  });
+
+  await browser.close();
+  return title;
 }
+

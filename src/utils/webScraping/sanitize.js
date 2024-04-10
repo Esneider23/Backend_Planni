@@ -8,7 +8,7 @@ export const sanitize = (hotelInfo) => {
   }
 
   // Eliminar el prefijo "COP" y cualquier carácter no numérico, excepto dígitos.
-  sanitizedPrice = sanitizedPrice.replace(/COP|\D/g, '').trim()
+  sanitizedPrice = sanitizedPrice.replace(/$|\D/g, '').trim()
 
   // Convertir la cadena resultante en un número.
   const numericPrice = parseInt(sanitizedPrice, 10)
