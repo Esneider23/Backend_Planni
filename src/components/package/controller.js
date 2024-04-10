@@ -1,6 +1,6 @@
 import { response } from '../../network/response.js'
 import { getTrip } from '../../utils/getTripAdvisor/getTrip.js'
-import { scrapeWebsiteGoogleHotels } from '../../utils/webScraping/scraping.js'
+import { scrapeWebsiteGoogleHotels, scrapeWebsiteViator } from '../../utils/webScraping/scraping.js'
 
 const getUrls = async (cityNames, contextUser) => {
   try {
@@ -70,14 +70,21 @@ export const scrapeWebsite = async (req, res) => {
     const { cityNames, contextUser } = req.body
     const urlsByCategory = await getUrls(cityNames, contextUser)
     const hotels = urlsByCategory.hotels
-    console.log(hotels)
-    const hotelPromises = Object.keys(hotels).map(async (locationId) => {
+    const attractions = urlsByCategory.attractions
+    /* const hotelPromises = Object.keys(hotels).map(async (locationId) => {
       const hotelName = hotels[locationId]
       const hotel = await scrapeWebsiteGoogleHotels(hotelName)
       return { locationId, hotel }
     })
-    const hotelPrices = await Promise.all(hotelPromises)
-    response.success(res, 'price of hotels', hotelPrices)
+    const hotelPrices = await Promise.all(hotelPromises) */
+    const attractionsPromises = Object.keys(attractions).map(async (locationId) => {
+      const attractionName = attractions[locationId]
+      console.log(attractionName)
+      const attraction = await scrapeWebsiteViator(attractionName)
+      console.log(locationId, attraction)
+      return { locationId, attraction }
+    })
+    response.success(res, 'price of hotels', attractionsPromises)
   } catch (error) {
     response.error(res, error)
   }
