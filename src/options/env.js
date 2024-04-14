@@ -16,5 +16,6 @@ export const env = {
   SALT_ROUNDS: process.env.SALT_ROUNDS,
   SECRET_KEY: process.env.SECRET_KEY,
   KEY_TRIPADVISOR: process.env.KEY_TRIPADVISOR,
-  HOST_PRODUCTION: process.env.HOST_PRODUCTION
+  HOST_PRODUCTION: process.env.HOST_PRODUCTION,
+  LATLONG: process.env.LATLONG
 }

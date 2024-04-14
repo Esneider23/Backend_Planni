@@ -46,7 +46,7 @@ export const scrapeWebsiteGoogleHotels = async (look) => {
   }
 }
 
-export const scrapeWebsiteViator = async (look) => {
+export const scrapeWebsiteGetYourGuide = async (look) => {
   const VIATOR_URL = `https://www.getyourguide.es/s/?q=${look}&searchSource=3`
   const browser = await puppeteer.launch({
     headless: true,
