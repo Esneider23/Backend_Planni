@@ -31,16 +31,7 @@ export const scrapeWebsite = async (req, res) => {
       Promise.all(hotelPromises),
       Promise.all(attractionsPromises)
     ])
-
-    // Crear el objeto JSON que almacena toda la información
-    const data = {
-      hotels: Object.fromEntries(hotelPrices),
-      attractions: Object.fromEntries(attractionPrices),
-      restaurants: restaurantsInfo // Puedes agregar la información de los restaurantes tal como está
-    }
-
-    // Enviar respuesta con el JSON que contiene toda la información
-    console.log(data)
+    console.log(hotelPrices)
     response.success(res, 'Data successfully scraped', "word")
   } catch (error) {
     response.error(res, error)
