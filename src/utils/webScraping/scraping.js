@@ -47,7 +47,7 @@ export const scrapeWebsiteGoogleHotels = async (look) => {
 }
 
 export const scrapeWebsiteGetYourGuide = async (look) => {
-  const VIATOR_URL = `https://www.getyourguide.es/s/?q=${look}&searchSource=3`
+  const GetYourGuideUrl = `https://www.getyourguide.es/s/?q=${look}&searchSource=3`
   const browser = await puppeteer.launch({
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
@@ -65,57 +65,42 @@ export const scrapeWebsiteGetYourGuide = async (look) => {
     })
   })
 
-  await page.goto(VIATOR_URL, { waitUntil: 'networkidle0' })
-
+  await page.goto(GetYourGuideUrl, { waitUntil: 'networkidle0' })
   await page.waitForSelector('.vertical-activity-card', { timeout: 10000 })
 
   const data = await page.evaluate((look) => {
-    const results = {}
     const cards = document.querySelectorAll('.vertical-activity-card')
-    let count = 0
-    cards.forEach((card) => {
-      if (count < 2) {
-        const titleElement = card.querySelector(
-          '.vertical-activity-card__title'
-        )
-        const priceElement = card.querySelector(
-          '.baseline-pricing__from--value'
-        )
-        const title = titleElement ? titleElement.innerText.trim() : null
-        let price = priceElement ? priceElement.innerText.trim() : null
-        price = price.replace(/COL\$/, '').trim()
+    for (const card of cards) {
+      const titleElement = card.querySelector('.vertical-activity-card__title')
+      const priceElement = card.querySelector('.baseline-pricing__from--value')
+      if (titleElement && priceElement) {
+        const title = titleElement.innerText.trim()
+        const price = priceElement.innerText.trim().replace(/COL\$/, '').trim()
 
         // Verificar si el título contiene al menos una de las palabras de búsqueda
         const containsWord = look
           .split(' ')
           .some((word) => title.toLowerCase().includes(word.toLowerCase()))
+
         if (containsWord) {
-          results['result_' + (count + 1)] = { title, price }
-          count++
+          return { title, price } // Devolver el primer resultado que cumple la condición
         }
       }
-    })
-    return results
+    }
+    return null // Devolver null si no se encuentra ningún resultado que cumpla la condición
   }, look)
-
-  // Sanitizar los datos antes de devolverlos
-  const sanitizedData = Object.keys(data).reduce((acc, key) => {
-    acc[key] = sanitize(data[key])
-    return acc
-  }, {})
 
   await browser.close()
 
+  // Asegurar que se sanitiza el resultado antes de devolverlo
+  const sanitizedData = data ? sanitize(data) : {}
   return sanitizedData
 }
 
 /* (async () => {
   const look = 'snorkel cartagena'
   console.log('Google Hotels:')
-  const tour = await scrapeWebsiteGoogleHotels(look)
-  console.log(tour)
   console.log('Viator:')
-  const tour2 = await scrapeWebsiteViator(look)
+  const tour2 = await scrapeWebsiteGetYourGuide(look)
   console.log(tour2)
-})()
- */
+})() */
