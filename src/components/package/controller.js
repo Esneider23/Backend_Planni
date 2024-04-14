@@ -1,90 +1,47 @@
 import { response } from '../../network/response.js'
-import { getTrip } from '../../utils/getTripAdvisor/getTrip.js'
-import { scrapeWebsiteGoogleHotels, scrapeWebsiteViator } from '../../utils/webScraping/scraping.js'
-
-const getUrls = async (cityNames, contextUser) => {
-  try {
-    const infoTrip = await getTrip(cityNames, contextUser)
-
-    // Obtener los primeros cuatro elementos de cada categoría
-    const hotels = infoTrip.hotels.data.slice(0, 4)
-    const restaurants = infoTrip.restaurants.data.slice(0, 4)
-
-    // Filtrar atracciones por nombre que contenga "tour"
-    const attractionsWithTour = infoTrip.attractions.data.filter((attraction) =>
-      attraction.name.toLowerCase().includes('tour')
-    )
-
-    // Tomar las primeras 4 atracciones con "tour"
-    let attractions = attractionsWithTour.slice(
-      0,
-      Math.min(4, attractionsWithTour.length)
-    )
-
-    // Si hay menos de 4 atracciones con "tour", completar con atracciones normales
-    const remainingAttractionsCount = 4 - attractions.length
-    if (remainingAttractionsCount > 0) {
-      const remainingAttractions = infoTrip.attractions.data
-        .filter((attraction) => !attraction.name.toLowerCase().includes('tour'))
-        .slice(0, remainingAttractionsCount)
-      attractions = attractions.concat(remainingAttractions)
-    }
-
-    // Obtener las URLs de hoteles, atracciones y restaurantes de forma concurrente
-    const [hotelName, attractionName, restaurantName] = await Promise.all([
-      Promise.all(hotels.map((hotel) => hotel.name)),
-      Promise.all(
-        attractions.map((attraction) => attraction.name)
-      ),
-      Promise.all(
-        restaurants.map((restaurant) => restaurant.name)
-      )
-    ])
-
-    // Almacenar las URLs en un diccionario por categoría
-    const urlsByCategory = {
-      hotels: Object.fromEntries(
-        hotels.map((hotel, index) => [hotel.location_id, hotelName[index]])
-      ),
-      attractions: Object.fromEntries(
-        attractions.map((attraction, index) => [
-          attraction.location_id,
-          attractionName[index]
-        ])
-      ),
-      restaurants: Object.fromEntries(
-        restaurants.map((restaurant, index) => [
-          restaurant.location_id,
-          restaurantName[index]
-        ])
-      )
-    }
-    return urlsByCategory
-  } catch (error) {
-    console.error(error)
-  }
-}
+import {getInfo } from '../../utils/getTripAdvisor/getInfo.js'
+import { scrapeWebsiteGoogleHotels, scrapeWebsiteGetYourGuide } from '../../utils/webScraping/scraping.js'
 
 export const scrapeWebsite = async (req, res) => {
   try {
     const { cityNames, contextUser } = req.body
-    const urlsByCategory = await getUrls(cityNames, contextUser)
-    const hotels = urlsByCategory.hotels
-    const attractions = urlsByCategory.attractions
-    /* const hotelPromises = Object.keys(hotels).map(async (locationId) => {
-      const hotelName = hotels[locationId]
-      const hotel = await scrapeWebsiteGoogleHotels(hotelName)
-      return { locationId, hotel }
-    })
-    const hotelPrices = await Promise.all(hotelPromises) */
-    const attractionsPromises = Object.keys(attractions).map(async (locationId) => {
-      const attractionName = attractions[locationId]
-      console.log(attractionName)
-      const attraction = await scrapeWebsiteViator(attractionName)
-      console.log(locationId, attraction)
-      return { locationId, attraction }
-    })
-    response.success(res, 'price of hotels', attractionsPromises)
+    const getNameOfInfo = await getInfo(cityNames, contextUser)
+    const hotels = getNameOfInfo.hotels
+    const attractions = getNameOfInfo.attractions
+    const restaurantsInfo = getNameOfInfo.restaurants
+
+    // Ejecutar solicitudes de scraping de hoteles en paralelo
+    const hotelPromises = Object.entries(hotels).map(
+      async ([locationId, hotelName]) => {
+        const hotel = await scrapeWebsiteGoogleHotels(hotelName)
+        return { locationId, hotel }
+      }
+    )
+
+    // Ejecutar solicitudes de scraping de atracciones en paralelo
+    const attractionsPromises = Object.entries(attractions).map(
+      async ([locationId, attractionName]) => {
+        const attraction = await scrapeWebsiteGetYourGuide(attractionName)
+        return { locationId, attraction }
+      }
+    )
+
+    // Esperar a que todas las solicitudes de scraping de hoteles y atracciones se completen
+    const [hotelPrices, attractionPrices] = await Promise.all([
+      Promise.all(hotelPromises),
+      Promise.all(attractionsPromises)
+    ])
+
+    // Crear el objeto JSON que almacena toda la información
+    const data = {
+      hotels: Object.fromEntries(hotelPrices),
+      attractions: Object.fromEntries(attractionPrices),
+      restaurants: restaurantsInfo // Puedes agregar la información de los restaurantes tal como está
+    }
+
+    // Enviar respuesta con el JSON que contiene toda la información
+    console.log(data)
+    response.success(res, 'Data successfully scraped', "word")
   } catch (error) {
     response.error(res, error)
   }
