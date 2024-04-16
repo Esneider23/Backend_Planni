@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { scrapeWebsite } from './controller.js'
+import { scrapeWebsiteController } from './controller.js'
 
 const packageRouter = Router()
 
-packageRouter.post('/', scrapeWebsite)
+packageRouter.post('/', scrapeWebsiteController)
 
 export { packageRouter }
