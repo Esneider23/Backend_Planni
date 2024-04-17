@@ -54,7 +54,6 @@ const scrapeWebsite = async (cityNames, contextUser) => {
         })
       }
     )
-
     let attractionResults = {}
     for (const [attractionId, atraccionesName] of Object.entries(attractions)) {
       try {
@@ -77,7 +76,7 @@ const scrapeWebsite = async (cityNames, contextUser) => {
   }
 }
 
-export const scrapeWebsiteController = async (req, res) => {
+/* export const scrapeWebsiteController = async (req, res) => {
   const { cityNames, contextUser, maxBudget } = req.body
   try {
     const data = await scrapeWebsite(cityNames, contextUser)
@@ -125,4 +124,87 @@ export const scrapeWebsiteController = async (req, res) => {
   } catch (error) {
     response.error(req, 'Error: ', error, 500)
   }
-} 
+}  */
+
+export const scrapeWebsiteController = async (req, res) => {
+  const { cityNames, contextUser, maxBudget } = req.body
+  try {
+    const data = await scrapeWebsite(cityNames, contextUser)
+    const hotels = data.hotels.map((hotel) => ({
+      id: Object.keys(hotel)[0],
+      name: Object.values(hotel)[0].title,
+      price: Object.values(hotel)[0].price
+    }))
+    const attractions = Object.values(data.attractions).map((attraction) => ({
+      id: attraction.id,
+      name: attraction.title,
+      price: attraction.price
+    }))
+
+    const restaurants = Object.keys(data.restaurants).map((key) => {
+      const minPrice = maxBudget * 0.1
+      const maxPrice = maxBudget * 0.15
+      const randomPrice = Math.random() * (maxPrice - minPrice) + minPrice
+      const formattedPrice = Math.round(randomPrice * 100) / 100
+
+      return {
+        id: key,
+        name: data.restaurants[key],
+        price: formattedPrice
+      }
+    })
+
+    let packages = []
+    for (let hotel of hotels) {
+      let cheapestPackage = null
+      for (let i = 0; i < attractions.length; i++) {
+        for (let j = i + 1; j < attractions.length; j++) {
+          for (let restaurant of restaurants) {
+            let totalPrice =
+              hotel.price +
+              attractions[i].price +
+              attractions[j].price +
+              restaurant.price
+
+            if (totalPrice <= maxBudget) {
+              let currentPackage = {
+                hotel: { id: hotel.id, name: hotel.name, price: hotel.price },
+                attractions: [
+                  {
+                    id: attractions[i].id,
+                    name: attractions[i].name,
+                    price: attractions[i].price
+                  },
+                  {
+                    id: attractions[j].id,
+                    name: attractions[j].name,
+                    price: attractions[j].price
+                  }
+                ],
+                restaurant: {
+                  id: restaurant.id,
+                  name: restaurant.name,
+                  price: restaurant.price
+                },
+                totalCost: totalPrice
+              }
+
+              if (
+                !cheapestPackage ||
+                currentPackage.totalCost < cheapestPackage.totalCost
+              ) {
+                cheapestPackage = currentPackage
+              }
+            }
+          }
+        }
+      }
+      if (cheapestPackage) {
+        packages.push(cheapestPackage)
+      }
+    }
+    response.success(res, 'packages', packages)
+  } catch (error) {
+    response.error(res, 'Error: ', error)
+  }
+}

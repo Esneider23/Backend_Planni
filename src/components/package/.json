@@ -3,499 +3,96 @@
   "message": "packages",
   "data": [
     {
-      "hotel": "Hotel San Pedro de Majagua",
+      "hotel": {
+        "id": "1181044",
+        "name": "Hotel Azuán Suites GEH Suites",
+        "price": 158461
+      },
       "attractions": [
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
+        {
+          "name": "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
+          "price": 324900
+        },
+        {
+          "name": "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel",
+          "price": 350000
+        }
       ],
-      "restaurants": ["Eco hotel los erizos", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1978976.42
+      "restaurant": {
+        "id": "11828546",
+        "name": "Eco hotel los erizos",
+        "price": 219431.45
+      },
+      "totalCost": 1052792.45
     },
     {
-      "hotel": "Hotel Azuán Suites GEH Suites",
+      "hotel": {
+        "id": "5453026",
+        "name": "Casa Espaciosa de 6 Habitaciones",
+        "price": 93174
+      },
       "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo"
+        {
+          "name": "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
+          "price": 324900
+        },
+        {
+          "name": "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel",
+          "price": 350000
+        }
       ],
-      "restaurants": ["Hugo", "Playa Surf"],
-      "totalCost": 1974011.7699999998
+      "restaurant": {
+        "id": "11828546",
+        "name": "Eco hotel los erizos",
+        "price": 219431.45
+      },
+      "totalCost": 987505.45
     },
     {
-      "hotel": "Hotel Azuán Suites GEH Suites",
+      "hotel": {
+        "id": "6380010",
+        "name": "Múcura Club Hotel",
+        "price": 573739
+      },
       "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo"
+        {
+          "name": "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
+          "price": 324900
+        },
+        {
+          "name": "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel",
+          "price": 350000
+        }
       ],
-      "restaurants": ["Hugo", "Eco hotel los erizos"],
-      "totalCost": 1925814.16
+      "restaurant": {
+        "id": "11828546",
+        "name": "Eco hotel los erizos",
+        "price": 219431.45
+      },
+      "totalCost": 1468070.45
     },
     {
-      "hotel": "Hotel Azuán Suites GEH Suites",
+      "hotel": {
+        "id": "8608804",
+        "name": "Secreto Islas del Rosario • Barefoot Luxury Hostel",
+        "price": 217453
+      },
       "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo"
+        {
+          "name": "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
+          "price": 324900
+        },
+        {
+          "name": "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel",
+          "price": 350000
+        }
       ],
-      "restaurants": ["Hugo", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1932775.48
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo"
-      ],
-      "restaurants": ["Playa Surf", "Eco hotel los erizos"],
-      "totalCost": 1942484.71
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo"
-      ],
-      "restaurants": ["Playa Surf", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1949446.0299999998
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo"
-      ],
-      "restaurants": ["Eco hotel los erizos", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1901248.42
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Hugo", "Playa Surf"],
-      "totalCost": 1528011.7699999998
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Hugo", "Eco hotel los erizos"],
-      "totalCost": 1479814.16
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Hugo", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1486775.48
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Playa Surf", "Eco hotel los erizos"],
-      "totalCost": 1496484.71
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Playa Surf", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1503446.0299999998
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Eco hotel los erizos", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1455248.42
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "Playa Surf"],
-      "totalCost": 1553111.7699999998
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "Eco hotel los erizos"],
-      "totalCost": 1504914.16
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1511875.48
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Playa Surf", "Eco hotel los erizos"],
-      "totalCost": 1521584.71
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Playa Surf", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1528546.0299999998
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Eco hotel los erizos", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1480348.42
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Hugo", "Playa Surf"],
-      "totalCost": 1762911.7699999998
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Hugo", "Eco hotel los erizos"],
-      "totalCost": 1714714.16
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Hugo", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1721675.48
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Playa Surf", "Eco hotel los erizos"],
-      "totalCost": 1731384.71
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Playa Surf", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1738346.0299999998
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Eco hotel los erizos", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1690148.42
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "Playa Surf"],
-      "totalCost": 1788011.7699999998
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "Eco hotel los erizos"],
-      "totalCost": 1739814.16
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1746775.48
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Playa Surf", "Eco hotel los erizos"],
-      "totalCost": 1756484.71
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Playa Surf", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1763446.0299999998
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Excursión por las islas del Caribe, Isla Grande y Fuerte de Portobelo",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Eco hotel los erizos", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1715248.42
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "Playa Surf"],
-      "totalCost": 1342011.7699999998
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "Eco hotel los erizos"],
-      "totalCost": 1293814.16
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1300775.48
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Playa Surf", "Eco hotel los erizos"],
-      "totalCost": 1310484.71
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Playa Surf", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1317446.0299999998
-    },
-    {
-      "hotel": "Hotel Azuán Suites GEH Suites",
-      "attractions": [
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Eco hotel los erizos", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1269248.42
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Hugo", "Playa Surf"],
-      "totalCost": 1943289.7699999998
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Hugo", "Eco hotel los erizos"],
-      "totalCost": 1895092.16
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Hugo", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1902053.48
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Playa Surf", "Eco hotel los erizos"],
-      "totalCost": 1911762.71
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Playa Surf", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1918724.0299999998
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado"
-      ],
-      "restaurants": ["Eco hotel los erizos", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1870526.42
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "Playa Surf"],
-      "totalCost": 1968389.7699999998
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "Eco hotel los erizos"],
-      "totalCost": 1920192.16
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1927153.48
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Playa Surf", "Eco hotel los erizos"],
-      "totalCost": 1936862.71
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Playa Surf", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1943824.0299999998
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Recorrido por las 5 mejores islas del rosario + pl bioluminiscente",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Eco hotel los erizos", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1895626.42
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "Playa Surf"],
-      "totalCost": 1757289.7699999998
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "Eco hotel los erizos"],
-      "totalCost": 1709092.16
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Hugo", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1716053.48
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Playa Surf", "Eco hotel los erizos"],
-      "totalCost": 1725762.71
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Playa Surf", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1732724.0299999998
-    },
-    {
-      "hotel": "Múcura Club Hotel",
-      "attractions": [
-        "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
-        "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel"
-      ],
-      "restaurants": ["Eco hotel los erizos", "FENIX BEACH CARTAGENA"],
-      "totalCost": 1684526.42
+      "restaurant": {
+        "id": "11828546",
+        "name": "Eco hotel los erizos",
+        "price": 219431.45
+      },
+      "totalCost": 1111784.45
     }
   ],
   "status": 200
