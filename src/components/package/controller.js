@@ -39,14 +39,14 @@ export const scrapeWebsite = async (req, res) => {
     response.error(res, error)
   }
 }
- */
+*/
 
-/* const scrapeWebsite = async (cityNames, contextUser) => {
+const scrapeWebsite = async (cityNames, contextUser) => {
   try {
     const getNameOfInfo = await getInfo(cityNames, contextUser)
     const hotels = getNameOfInfo.hotels
     const attractions = getNameOfInfo.attractions
-    const restaurantsInfo = getNameOfInfo.restaurants
+    const restaurantsInfo = getNameOfInfo.restaurants 
     const hotelePromises = Object.entries(hotels).map(
       ([hotelId, hotelName]) => {
         return scrapeWebsiteGoogleHotels(hotelName).then((result) => {
@@ -71,7 +71,6 @@ export const scrapeWebsite = async (req, res) => {
       attractions: attractionResults,
       restaurants: restaurantsInfo
     }
-    console.log(data.restaurants)
     return data
   } catch (error) {
     return error
@@ -81,15 +80,21 @@ export const scrapeWebsite = async (req, res) => {
 export const scrapeWebsiteController = async (req, res) => {
   const { cityNames, contextUser, maxBudget } = req.body
   try {
-    const restaurantPrice = 200000
     const data = await scrapeWebsite(cityNames, contextUser)
     const hotels = data.hotels.map((hotel) => Object.values(hotel)[0])
     const attractions = Object.values(data.attractions)
-    const restaurants = Object.keys(data.restaurants).map((key) => ({
-      id: key,
-      name: data.restaurants[key],
-      price: restaurantPrice
-    }))
+    const restaurants = Object.keys(data.restaurants).map((key) => {
+      const minPrice = maxBudget * 0.1
+      const maxPrice = maxBudget * 0.15
+      const randomPrice = Math.random() * (maxPrice - minPrice) + minPrice
+      const formattedPrice = Math.round(randomPrice * 100) / 100
+
+      return {
+        id: key,
+        name: data.restaurants[key],
+        price: formattedPrice
+      }
+    })
     let packages = [] // Cambiado de 'package' a 'packages'
     for (let hotel of hotels) {
       for (let i = 0; i < attractions.length; i++) {
@@ -120,68 +125,4 @@ export const scrapeWebsiteController = async (req, res) => {
   } catch (error) {
     response.error(req, 'Error: ', error, 500)
   }
-} */
-
-const scrapeWebsite = async (cityNames, contextUser) => {
-  try {
-    const getNameOfInfo = await getInfo(cityNames, contextUser)
-    const hotels = getNameOfInfo.hotels
-    const attractions = getNameOfInfo.attractions
-    const hotelePromises = Object.entries(hotels).map(
-      ([hotelId, hotelName]) => {
-        return scrapeWebsiteGoogleHotels(hotelName).then((result) => {
-          return { [hotelId]: result }
-        })
-      }
-    )
-
-    let attractionResults = {}
-    for (const [attractionId, atraccionesName] of Object.entries(attractions)) {
-      try {
-        const result = await scrapeWebsiteGetYourGuide(atraccionesName)
-        attractionResults[attractionId] = result
-      } catch (error) {
-        console.error('Error scraping hotel:', atraccionesName, error)
-        attractionResults[attractionId] = { error: 'Failed to scrape data' }
-      }
-    }
-    const hotelsResults = await Promise.all(hotelePromises)
-    const data = {
-      hotels: hotelsResults,
-      attractions: attractionResults,
-    }
-    return data
-  } catch (error) {
-    return error
-  }
-}
-
-export const scrapeWebsiteController = async (req, res) => {
-  const { cityNames, contextUser, maxBudget } = req.body
-  try {
-    const data = await scrapeWebsite(cityNames, contextUser)
-    const hotels = data.hotels.map((hotel) => Object.values(hotel)[0])
-    const attractions = Object.values(data.attractions)
-
-    let packages = []
-    for (let hotel of hotels) {
-      for (let i = 0; i < attractions.length; i++) {
-        for (let j = i + 1; j < attractions.length; j++) {
-          let totalPrice =
-            hotel.price + attractions[i].price + attractions[j].price
-
-          if (totalPrice <= maxBudget) {
-            packages.push({
-              hotel: hotel.title,
-              attractions: [attractions[i].title, attractions[j].title],
-              totalCost: totalPrice
-            })
-          }
-        }
-      }
-    }
-    response.success(res, 'packages', packages)
-  } catch (error) {
-    response.error(res, 'Error: ', error)
-  }
-}
+} 
