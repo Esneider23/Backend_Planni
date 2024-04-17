@@ -45,9 +45,8 @@ const tripAsync = async (infoDeberta, stringWords, category, results) => {
         return individualApi.data.data
       })
     )
-
-    individualResults.flat()
-    results[category] = individualResults
+    const flattenedResults = individualResults.flat()
+    results[category] = flattenedResults
   } else {
     // Almacena los resultados en el objeto por categoría
     results[category] = api.data.data
