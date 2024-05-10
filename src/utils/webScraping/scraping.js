@@ -6,15 +6,16 @@ import { sanitize } from './sanitize.js'
 const waitFor = (timeInMs) => new Promise((r) => setTimeout(r, timeInMs))
 
 export const scrapeWebsiteGoogleHotels = async (look) => {
+  const timeId = `Golgle Hotels - ${crypto.randomUUID()}`
+  console.time(timeId)
   const GOOGLE_HOTEL_PRICE = `https://www.google.com/travel/hotels?q=${encodeURIComponent(look)}&utm_campaign=sharing&utm_medium=link&utm_source=htls&ved=0CAAQ5JsGahcKEwiwocKUmrGFAxUAAAAAHQAAAAAQBQ&ts=CAEaIAoCGgASGhIUCgcI6A8QBRgZEgcI6A8QBRgeGAUyAggCKgkKBToDQ09QGgA&rp=OAE`
   const browser = await puppeteer.launch({ headless: true })
   const page = await browser.newPage()
 
   await page.goto(GOOGLE_HOTEL_PRICE)
 
-  const buttonConsentReject = await page.$(
-    '.VfPpkd-LgbsSe[aria-label="Reject all"]'
-  )
+  const buttonConsentReject = await page.$()
+  console.timeEnd(timeId)
   if (buttonConsentReject) await buttonConsentReject.click()
   await waitFor(3000)
 
@@ -31,7 +32,9 @@ export const scrapeWebsiteGoogleHotels = async (look) => {
     const priceElement = $(el).find('.kixHKb span').first()
     const priceText = priceElement.text().trim()
 
-    if (/^\$\s*\d{1,3}(\.\d{3})*$/.test(priceText)) {
+    const pricePattern = /^COP|\$ (\d+)((\.|,)\d+)*$/
+
+    if (pricePattern.test(priceText)) {
       firstHotelFound = sanitize({
         title: titleElement.text(),
         price: priceText.replace(/\D/g, '')
