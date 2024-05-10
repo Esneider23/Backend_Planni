@@ -46,7 +46,7 @@ const scrapeWebsite = async (cityNames, contextUser) => {
     const getNameOfInfo = await getInfo(cityNames, contextUser)
     const hotels = getNameOfInfo.hotels
     const attractions = getNameOfInfo.attractions
-    const restaurantsInfo = getNameOfInfo.restaurants 
+    const restaurantsInfo = getNameOfInfo.restaurants
     const hotelePromises = Object.entries(hotels).map(
       ([hotelId, hotelName]) => {
         return scrapeWebsiteGoogleHotels(hotelName).then((result) => {
@@ -54,7 +54,7 @@ const scrapeWebsite = async (cityNames, contextUser) => {
         })
       }
     )
-    let attractionResults = {}
+    const attractionResults = {}
     for (const [attractionId, atraccionesName] of Object.entries(attractions)) {
       try {
         const result = await scrapeWebsiteGetYourGuide(atraccionesName)
@@ -154,20 +154,20 @@ export const scrapeWebsiteController = async (req, res) => {
       }
     })
 
-    let packages = []
-    for (let hotel of hotels) {
+    const packages = []
+    for (const hotel of hotels) {
       let cheapestPackage = null
       for (let i = 0; i < attractions.length; i++) {
         for (let j = i + 1; j < attractions.length; j++) {
-          for (let restaurant of restaurants) {
-            let totalPrice =
+          for (const restaurant of restaurants) {
+            const totalPrice =
               hotel.price +
               attractions[i].price +
               attractions[j].price +
               restaurant.price
 
             if (totalPrice <= maxBudget) {
-              let currentPackage = {
+              const currentPackage = {
                 hotel: { id: hotel.id, name: hotel.name, price: hotel.price },
                 attractions: [
                   {
