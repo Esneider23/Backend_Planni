@@ -4,42 +4,6 @@ import {
   scrapeWebsiteGoogleHotels,
   scrapeWebsiteGetYourGuide
 } from '../../utils/webScraping/scraping.js'
-/*
-export const scrapeWebsite = async (req, res) => {
-  res.setTimeout(1000 * 60 * 2, (res) => {
-    response.error(res, 'Timeout', 408)
-  })
-
-  try {
-    const { cityNames, contextUser } = req.body
-    const getNameOfInfo = await getInfo(cityNames, contextUser)
-    const hotels = getNameOfInfo.hotels
-    const attractions = getNameOfInfo.attractions
-    const restaurantsInfo = getNameOfInfo.restaurants
-
-    const hotelPromises = Object.entries(hotels).map(([hotelId, hotelName]) => {
-      return scrapeWebsiteGoogleHotels(hotelName).then((result) => {
-        return { [hotelId]: result }
-      })
-    })
-
-    const attractionPromises = Object.entries(attractions).map(
-      ([attractionId, attractionName]) => {
-        return scrapeWebsiteGetYourGuide(attractionName).then((result) => {
-          return { [attractionId]: result }
-        })
-      }
-    )
-
-    const hotelsResults = await Promise.all(hotelPromises)
-    const attractionsResults = await Promise.all(attractionPromises)
-
-    response.success(res, hotelsResults, attractionsResults)
-  } catch (error) {
-    response.error(res, error)
-  }
-}
-*/
 
 const scrapeWebsite = async (cityNames, contextUser) => {
   try {

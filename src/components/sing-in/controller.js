@@ -1,5 +1,5 @@
 import { generateToken } from '../../utils/jwt/generateToken.js'
-import { consults } from '../../db/consults.js'
+import { consults } from '../../db/consults_users.js'
 
 export const signIn = async (req, res) => {
   const { username, password } = req.body

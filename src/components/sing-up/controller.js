@@ -1,6 +1,6 @@
 import { response } from '../../network/response.js'
 import { hashPassword } from '../../utils/bcrypt/hashPassword.js'
-import { consults } from '../../db/consults.js'
+import { consults } from '../../db/consults_users.js'
 
 const registryUserClient = async (req, res) => {
   try {
