@@ -4,6 +4,7 @@ import {
   scrapeWebsiteGoogleHotels,
   scrapeWebsiteGetYourGuide
 } from '../../utils/webScraping/scraping.js'
+import { getDescriptionsAndImages } from '../../utils/getTripAdvisor/getTrip.js'
 
 const scrapeWebsite = async (cityNames, contextUser) => {
   try {
@@ -11,13 +12,39 @@ const scrapeWebsite = async (cityNames, contextUser) => {
     const hotels = getNameOfInfo.hotels
     const attractions = getNameOfInfo.attractions
     const restaurantsInfo = getNameOfInfo.restaurants
-    const hotelePromises = Object.entries(hotels).map(
+    /* const hotelePromises = Object.entries(hotels).map(
       ([hotelId, hotelName]) => {
         return scrapeWebsiteGoogleHotels(hotelName).then((result) => {
+
           return { [hotelId]: result }
         })
       }
+    ) */
+
+    const hotelePromises = Object.entries(hotels).map(
+      ([hotelId, hotelName]) => {
+        return scrapeWebsiteGoogleHotels(hotelName).then(async (result) => {
+          try {
+            const additionalInfo = await getDescriptionsAndImages(hotelId)
+            
+            const combinedData = {
+              ...result, // Datos del scraping
+              description: additionalInfo.description,
+              imageUrl: additionalInfo.images
+            }
+
+            // Retorna el objeto combinado dentro de un objeto con la clave hotelId
+            return { [hotelId]: combinedData }
+          } catch (error) {
+            console.error('Error fetching additional info:', error)
+            // Si hay un error, retorna solo los datos del resultado del scraping
+            return { [hotelId]: { ...result } }
+          }
+        })
+      }
     )
+
+
     const attractionResults = {}
     for (const [attractionId, atraccionesName] of Object.entries(attractions)) {
       try {
@@ -39,56 +66,6 @@ const scrapeWebsite = async (cityNames, contextUser) => {
     return error
   }
 }
-
-/* export const scrapeWebsiteController = async (req, res) => {
-  const { cityNames, contextUser, maxBudget } = req.body
-  try {
-    const data = await scrapeWebsite(cityNames, contextUser)
-    const hotels = data.hotels.map((hotel) => Object.values(hotel)[0])
-    const attractions = Object.values(data.attractions)
-    const restaurants = Object.keys(data.restaurants).map((key) => {
-      const minPrice = maxBudget * 0.1
-      const maxPrice = maxBudget * 0.15
-      const randomPrice = Math.random() * (maxPrice - minPrice) + minPrice
-      const formattedPrice = Math.round(randomPrice * 100) / 100
-
-      return {
-        id: key,
-        name: data.restaurants[key],
-        price: formattedPrice
-      }
-    })
-    let packages = [] // Cambiado de 'package' a 'packages'
-    for (let hotel of hotels) {
-      for (let i = 0; i < attractions.length; i++) {
-        for (let j = i + 1; j < attractions.length; j++) {
-          for (let k = 0; k < restaurants.length; k++) {
-            for (let l = k + 1; l < restaurants.length; l++) {
-              let totalPrice =
-                hotel.price +
-                attractions[i].price +
-                attractions[j].price +
-                restaurants[k].price +
-                restaurants[l].price
-
-              if (totalPrice <= maxBudget) {
-                packages.push({
-                  hotel: hotel.title,
-                  attractions: [attractions[i].title, attractions[j].title],
-                  restaurants: [restaurants[k].name, restaurants[l].name],
-                  totalCost: totalPrice
-                })
-              }
-            }
-          }
-        }
-      }
-    }
-    response.success(res, 'packages', packages, 200)
-  } catch (error) {
-    response.error(req, 'Error: ', error, 500)
-  }
-}  */
 
 export const scrapeWebsiteController = async (req, res) => {
   const { cityNames, contextUser, maxBudget } = req.body
@@ -172,3 +149,4 @@ export const scrapeWebsiteController = async (req, res) => {
     response.error(res, 'Error: ', error)
   }
 }
+
