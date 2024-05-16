@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer'
 import cheerio from 'cheerio'
-import { sanitize } from './sanitize.js'
+import { sanitize, sanitizeGetYourGuide } from './sanitize.js'
 
 // eslint-disable-next-line promise/param-names
 const waitFor = (timeInMs) => new Promise((r) => setTimeout(r, timeInMs))
@@ -74,9 +74,13 @@ export const scrapeWebsiteGetYourGuide = async (look) => {
     for (const card of cards) {
       const titleElement = card.querySelector('.vertical-activity-card__title')
       const priceElement = card.querySelector('.baseline-pricing__from--value')
-      if (titleElement && priceElement) {
+      const imgElement = card.querySelector(
+        '.vertical-activity-card__photo img'
+      )
+      if (titleElement && priceElement && imgElement) {
         const title = titleElement.innerText.trim()
         const price = priceElement.innerText.trim().replace(/COL\$/, '').trim()
+        const imgSrc = imgElement.getAttribute('src')
 
         // Verificar si el título contiene al menos una de las palabras de búsqueda
         const containsWord = look
@@ -84,7 +88,7 @@ export const scrapeWebsiteGetYourGuide = async (look) => {
           .some((word) => title.toLowerCase().includes(word.toLowerCase()))
 
         if (containsWord) {
-          return { title, price } // Devolver el primer resultado que cumple la condición
+          return { title, price, imgSrc } // Devolver el primer resultado que cumple la condición
         }
       }
     }
@@ -94,14 +98,13 @@ export const scrapeWebsiteGetYourGuide = async (look) => {
   await browser.close()
 
   // Asegurar que se sanitiza el resultado antes de devolverlo
-  const sanitizedData = data ? sanitize(data) : {}
+  const sanitizedData = data ? sanitizeGetYourGuide(data) : {}
   return sanitizedData
 }
 
 /* (async () => {
   const look = 'snorkel cartagena'
-  console.log('Google Hotels:')
-  console.log('Viator:')
   const tour2 = await scrapeWebsiteGetYourGuide(look)
   console.log(tour2)
 })() */
+

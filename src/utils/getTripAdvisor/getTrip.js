@@ -100,7 +100,7 @@ export const getDescriptionsAndImages = async (locationId) => {
     if (images.data.data.length > 0) {
       return {
         description: locationDetails.data.description,
-        images: images.data.data[0].images.thumbnail.url
+        images: images.data.data[0].images.medium.url
       }
     } else {
       throw new Error('No se encontraron imágenes para este lugar.')
