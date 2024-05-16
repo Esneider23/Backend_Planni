@@ -80,6 +80,7 @@ export const scrapeWebsiteGetYourGuide = async (look) => {
       if (titleElement && priceElement && imgElement) {
         const title = titleElement.innerText.trim()
         const price = priceElement.innerText.trim().replace(/COL\$/, '').trim()
+        const description = 'null'
         const imgSrc = imgElement.getAttribute('src')
 
         // Verificar si el título contiene al menos una de las palabras de búsqueda
@@ -88,7 +89,7 @@ export const scrapeWebsiteGetYourGuide = async (look) => {
           .some((word) => title.toLowerCase().includes(word.toLowerCase()))
 
         if (containsWord) {
-          return { title, price, imgSrc } // Devolver el primer resultado que cumple la condición
+          return { title, description, price, imgSrc } // Devolver el primer resultado que cumple la condición
         }
       }
     }
