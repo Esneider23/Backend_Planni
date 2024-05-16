@@ -193,7 +193,6 @@ export const consults = {
   createUserClient,
   createUserOtherType,
   consultsSupplier,
-  // Codigo de la api auth planni
   createUser,
   getUserByUsername,
   getUserById,

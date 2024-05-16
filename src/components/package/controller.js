@@ -5,6 +5,7 @@ import {
   scrapeWebsiteGetYourGuide
 } from '../../utils/webScraping/scraping.js'
 import { getDescriptionsAndImages } from '../../utils/getTripAdvisor/getTrip.js'
+import { packagesConsults } from '../../db/consults_package.js'
 
 const scrapeWebsite = async (cityNames, contextUser) => {
   try {
@@ -12,22 +13,13 @@ const scrapeWebsite = async (cityNames, contextUser) => {
     const hotels = getNameOfInfo.hotels
     const attractions = getNameOfInfo.attractions
     const restaurantsInfo = getNameOfInfo.restaurants
-    /* const hotelePromises = Object.entries(hotels).map(
-      ([hotelId, hotelName]) => {
-        return scrapeWebsiteGoogleHotels(hotelName).then((result) => {
-
-          return { [hotelId]: result }
-        })
-      }
-    ) */
-
     const hotelePromises = Object.entries(hotels).map(
       ([hotelId, hotelName]) => {
         return scrapeWebsiteGoogleHotels(hotelName).then(async (result) => {
           try {
             const additionalInfo = await getDescriptionsAndImages(hotelId)
             const combinedData = {
-              ...result, // Datos del scraping
+              ...result,
               description: additionalInfo.description,
               imageUrl: additionalInfo.images
             }
@@ -69,16 +61,18 @@ export const scrapeWebsiteController = async (req, res) => {
     const hotels = data.hotels.map((hotel) => ({
       id: Object.keys(hotel)[0],
       name: Object.values(hotel)[0].title,
-      price: Object.values(hotel)[0].price,
       description: Object.values(hotel)[0].description,
+      price: Object.values(hotel)[0].price,
       imageUrl: Object.values(hotel)[0].imageUrl
     }))
-    console.log(hotels.imageUrl)
+    const hotelePromises = hotels.map((hotel) => packagesConsults.getHotels(hotel))
+    const hotelsResults = await Promise.all(hotelePromises)
+    console.log('hotelsResults:', hotelsResults)
     const attractions = Object.values(data.attractions).map((attraction) => ({
       id: attraction.id,
       name: attraction.title,
       price: attraction.price,
-      imgSrc: attraction.imgSrc
+      imgSrc: attraction.src
     }))
 
     const restaurants = Object.keys(data.restaurants).map((key) => {
