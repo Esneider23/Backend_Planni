@@ -82,6 +82,7 @@ export const scrapeWebsiteGetYourGuide = async (look) => {
         const price = priceElement.innerText.trim().replace(/COL\$/, '').trim()
         const description = 'null'
         const imgSrc = imgElement.getAttribute('src')
+        console.log(imgSrc)
 
         // Verificar si el título contiene al menos una de las palabras de búsqueda
         const containsWord = look

@@ -12,7 +12,6 @@ const scrapeWebsite = async (cityNames, contextUser) => {
   const hotels = getNameOfInfo.hotels
   const attractions = getNameOfInfo.attractions
   const restaurantsInfo = getNameOfInfo.restaurants
-
   const hotelsResults = []
 
   for (const [hotelId, hotelName] of Object.entries(hotels)) {
@@ -43,32 +42,33 @@ const scrapeWebsite = async (cityNames, contextUser) => {
       })
     }
   }
-  console.log(attractions)
   const attractionResults = {}
-  for (const [attractionId, attractionInfo] of Object.entries(attractions)) {
+  for (const [attractionId, attractionName] of Object.entries(attractions)) {
     try {
-      let attractionInfo = await packagesConsults.getAtraction(attractionId)
-      if (!attractionInfo) {
-        const result = await scrapeWebsiteGetYourGuide(attractionInfo.name)
-        console.log(result)
-        attractionInfo = {
+      let attractionInfoDb = await packagesConsults.getAtraction(attractionId)
+      if (!attractionInfoDb) {
+        const result = await scrapeWebsiteGetYourGuide(attractionName)
+        const attractionInfo = {
           id: attractionId,
-          name: attractionInfo.title,
+          name: result.title,
           description: result.description,
           price: result.price,
           imageUrl: result.imgSrc
         }
+        // await packagesConsults.createAtraction(attractionInfo)
+        attractionResults[attractionId] = attractionInfo
+      } else {
+        attractionResults[attractionId] = attractionInfoDb
       }
-      await packagesConsults.createAtraction(attractionInfo)
-      attractionResults.push({ [attractionId]: attractionInfo }) 
     } catch (error) {
-      console.error('Error scraping attraction:', attractionInfo.name, error)
+      console.error('Error scraping attraction:', attractionName, error)
       attractionResults[attractionId] = {
         error: 'Failed to scrape data',
-        id: attractionInfo.id
+        id: attractionId
       }
     }
   }
+
 
   const data = {
     hotels: hotelsResults,

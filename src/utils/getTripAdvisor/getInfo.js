@@ -99,7 +99,7 @@ export const getInfo = async (cityNames, contextUser) => {
       attractions: Object.fromEntries(
         attractions.map((attraction) => [
           attraction.location_id,
-          { name: attraction.name}
+          attraction.name
         ])
       ),
       restaurants: Object.fromEntries(
@@ -109,7 +109,6 @@ export const getInfo = async (cityNames, contextUser) => {
         ])
       )
     }
-
     return getName
   } catch (error) {
     console.error(error)
