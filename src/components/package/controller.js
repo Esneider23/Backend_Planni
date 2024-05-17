@@ -158,8 +158,8 @@ export const scrapeWebsiteController = async (req, res) => {
                   }
                 ],
                 restaurant: {
-                  id: restaurant.id,
-                  name: restaurant.name,
+                  id: restaurant.id_restaurant,
+                  name: restaurant.name_restaurant,
                   price: restaurantPrice
                 },
                 totalCost: totalPrice
@@ -175,6 +175,14 @@ export const scrapeWebsiteController = async (req, res) => {
       )[0]
       if (cheapestPackage) {
         packages.push(cheapestPackage)
+        // Crear y guardar el paquete en la base de datos
+        await packagesConsults.createPackage({
+          hotelId: cheapestPackage.hotel.id,
+          idAttraction: cheapestPackage.attractions[0].id,
+          idAttraction2: cheapestPackage.attractions[1].id,
+          restaurantId: cheapestPackage.restaurant.id,
+          pricePackage: cheapestPackage.totalCost
+        })
       }
     }
 
@@ -183,3 +191,4 @@ export const scrapeWebsiteController = async (req, res) => {
     response.error(res, 'Error: ', error)
   }
 }
+
