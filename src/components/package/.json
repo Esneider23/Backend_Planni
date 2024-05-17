@@ -1,0 +1,88 @@
+{
+  "success": true,
+  "message": "packages",
+  "data": [
+    {
+      "hotel": {
+        "id": 1181044,
+        "name": "Hotel Playa Club",
+        "price": 249765,
+        "description": null,
+        "imageUrl": "https://media-cdn.tripadvisor.com/media/photo-f/0c/12/0a/88/isla-del-pirata.jpg"
+      },
+      "attractions": [
+        {
+          "id": 12178396,
+          "name": "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
+          "price": 324300,
+          "imgSrc": "https://cdn.getyourguide.com/tf/assets/static/miscellaneous/transparent.png"
+        },
+        {
+          "id": 12874934,
+          "name": "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel",
+          "price": 350000,
+          "imgSrc": "https://cdn.getyourguide.com/img/tour/c263cee00a70e82ae203cc4f6cfa1d4356425f181614a4a051becbce98ac46be.jpg/132.jpg"
+        }
+      ],
+      "restaurant": {
+        "price": 202386.08
+      },
+      "totalCost": 1126451.08
+    },
+    {
+      "hotel": {
+        "id": 1181044,
+        "name": "Hotel Playa Club",
+        "price": 249765,
+        "description": null,
+        "imageUrl": "https://media-cdn.tripadvisor.com/media/photo-f/0c/12/0a/88/isla-del-pirata.jpg"
+      },
+      "attractions": [
+        {
+          "id": 12178396,
+          "name": "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
+          "price": 324300,
+          "imgSrc": "https://cdn.getyourguide.com/tf/assets/static/miscellaneous/transparent.png"
+        },
+        {
+          "id": 12874934,
+          "name": "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel",
+          "price": 350000,
+          "imgSrc": "https://cdn.getyourguide.com/img/tour/c263cee00a70e82ae203cc4f6cfa1d4356425f181614a4a051becbce98ac46be.jpg/132.jpg"
+        }
+      ],
+      "restaurant": {
+        "price": 203330.94
+      },
+      "totalCost": 1127395.94
+    },
+    {
+      "hotel": {
+        "id": 1181044,
+        "name": "Hotel Playa Club",
+        "price": 249765,
+        "description": null,
+        "imageUrl": "https://media-cdn.tripadvisor.com/media/photo-f/0c/12/0a/88/isla-del-pirata.jpg"
+      },
+      "attractions": [
+        {
+          "id": 12178396,
+          "name": "Desde Mascate : Puesta de sol en kayak en Khor al khairan. Privado",
+          "price": 324300,
+          "imgSrc": "https://cdn.getyourguide.com/tf/assets/static/miscellaneous/transparent.png"
+        },
+        {
+          "id": 12874934,
+          "name": "Cartagena: Excursión en barco por las Islas Islabela con almuerzo y cóctel",
+          "price": 350000,
+          "imgSrc": "https://cdn.getyourguide.com/img/tour/c263cee00a70e82ae203cc4f6cfa1d4356425f181614a4a051becbce98ac46be.jpg/132.jpg"
+        }
+      ],
+      "restaurant": {
+        "price": 236862.45
+      },
+      "totalCost": 1160927.45
+    }
+  ],
+  "status": 200
+}
