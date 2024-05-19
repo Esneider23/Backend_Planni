@@ -102,21 +102,84 @@ const createRestaurant = async (restaurantInfo) => {
 }
 
 const getPackages = async (idPackage) => {
-  const { id } = idPackage
-  const query = 'SELECT * FROM package WHERE id_package = $1'
-  const value = [id]
+  const query = `
+    SELECT
+        p.id_package,
+        h.name_hotels,
+        h.price AS price_hotels,
+        h.description_hotels,
+        h.imageurl AS hotels,
+        r.name_restaurant,
+        r.description_restaurant,
+        r.price AS price_restaurant,
+        a1.name_attractions AS name_attraction1,
+        a1.description_attractions AS description_attraction1,
+        a1.price_attraction AS price_attraction1,
+        a1.imgsrc_attraction AS img_attraction1,
+        a2.name_attractions AS name_attraction2,
+        a2.description_attractions AS description_attraction2,
+        a2.price_attraction AS price_attraction2,
+        a2.imgsrc_attraction AS img_attraction2,
+        p.price_package
+    FROM
+        package p
+    LEFT JOIN
+        hotels h ON p.id_hotels = h.id_hotels
+    LEFT JOIN
+        restaurant r ON p.id_restaurant = r.id_restaurant
+    LEFT JOIN
+        attractions a1 ON p.id_attraction = a1.id_attractions
+    LEFT JOIN
+        attractions a2 ON p.id_attraction2 = a2.id_attractions
+    WHERE
+        p.id_package = $1;
+  `;
+  const values = [idPackage];
+  
   try {
-    const { rows } = await client.query(query, value)
+    const { rows } = await client.query(query, values);
     if (rows.length === 0) {
-      return null
+      return null;
     } else {
-      return rows[0]
+      const packageData = rows[0];
+      const response = {
+        hotel: {
+          id: packageData.id_hotels,
+          name: packageData.name_hotels,
+          price: packageData.price_hotels,
+          description: packageData.description_hotels,
+          imageUrl: packageData.hotels
+        },
+        restaurant: {
+          id: packageData.id_restaurant,
+          name: packageData.name_restaurant,
+          price: packageData.price_restaurant
+        },
+        attractions: [
+          {
+            id: packageData.id_attraction1,
+            name: packageData.name_attraction1,
+            price: packageData.price_attraction1,
+            imgSrc: packageData.img_attraction1
+          },
+          {
+            id: packageData.id_attraction2,
+            name: packageData.name_attraction2,
+            price: packageData.price_attraction2,
+            imgSrc: packageData.img_attraction2
+          }
+        ],
+        totalCost: packageData.price_package
+      };
+  
+      return response;
     }
   } catch (error) {
-    console.error('Error fetching hotel:', error)
-    throw error
+    console.error('Error fetching package:', error);
+    throw error;
   }
-}
+};
+
 
 const createPackage = async (packageInfo) => {
   const {hotelId, idAttraction, idAttraction2 , restaurantId, pricePackage } =

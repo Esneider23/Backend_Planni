@@ -192,3 +192,22 @@ export const scrapeWebsiteController = async (req, res) => {
   }
 }
 
+export const getPackages = async (req, res) => {
+  const { id } = req.params; 
+
+  try {
+    const idPackage = parseInt(id, 10);
+    if (isNaN(idPackage)) {
+      return response.error(res, 'Invalid package ID');
+    }
+
+    const packages = await packagesConsults.getPackages(idPackage);
+    if (!packages) {
+      return response.error(res, 'Package not found');
+    }
+
+    response.success(res, 'Packages fetched successfully', packages);
+  } catch (error) {
+    response.error(res, 'Error fetching package', error);
+  }
+};
