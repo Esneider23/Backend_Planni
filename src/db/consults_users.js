@@ -68,7 +68,7 @@ const generateRandomUsername = (email) => {
 const createUserClient = async (email, password, country) => {
   try {
     const nameUser = await name(email)
-    const username = await generateRandomUsername(email)
+    const username = generateRandomUsername(email)
     const query =
       'INSERT INTO users (username, name_user, id_country, email, password, id_rol) VALUES ($1, $2, $3, $4, $5, $6)'
     const values = [username, nameUser, country, email, password, '3']
@@ -149,6 +149,15 @@ const createUser = async (
   return rows[0].id_users
 }
 
+const getUserByEmail = async (email) => {
+  const query = {
+    text: 'SELECT id_users, username, name_user, lastname_user, id_country, email FROM users WHERE email = $1',
+    values: [email]
+  }
+  const { rows } = await client.query(query)
+  return rows[0] || null
+}
+
 const getUserByUsername = async (username) => {
   const query = {
     text: 'SELECT id_users, username, name_user, lastname_user, id_country, email FROM users WHERE username = $1',
@@ -165,6 +174,24 @@ const getUserById = async (id) => {
   }
   const { rows } = await client.query(query)
   return rows[0] || null
+}
+
+const validateAccount = async (email, password) => {
+  const query = {
+    text: 'SELECT * FROM users WHERE email = $1',
+    values: [email]
+  }
+
+  const { rows } = await client.query(query)
+
+  if (rows.length === 0) return null
+
+  const user = rows[0]
+
+  const passMatches = await compareHash(password, user.password)
+
+  if (passMatches) return user
+  else return null
 }
 
 const validateUser = async (username, password) => {
@@ -196,5 +223,7 @@ export const consults = {
   createUser,
   getUserByUsername,
   getUserById,
-  validateUser
+  validateUser,
+  getUserByEmail,
+  validateAccount
 }
