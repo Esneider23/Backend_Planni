@@ -23,7 +23,6 @@ export const sanitize = (info) => {
 export const sanitizeGetYourGuide = (info) => {
   const sanitizedTitle = info.title.trim()
   let sanitizedPrice = info.price
-  let srcInfo = info.imgSrc
 
   // Verificar si el precio es un número y convertirlo a cadena si es necesario
   if (typeof info.price === 'number') {
@@ -40,6 +39,7 @@ export const sanitizeGetYourGuide = (info) => {
   return {
     title: sanitizedTitle,
     price: numericPrice, // Ahora price es un número
-    src: srcInfo
+    src: info.imgSrc,
+    description: info.description
   }
 }

@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer'
 import cheerio from 'cheerio'
 import { sanitize, sanitizeGetYourGuide } from './sanitize.js'
+import { generateDescriptionAttraction } from './generateDescribe.js'
 
 // eslint-disable-next-line promise/param-names
 const waitFor = (timeInMs) => new Promise((r) => setTimeout(r, timeInMs))
@@ -45,8 +46,6 @@ export const scrapeWebsiteGoogleHotels = async (look) => {
   }
 }
 
-
-
 export const scrapeWebsiteGetYourGuide = async (look) => {
   const GetYourGuideUrl = `https://www.getyourguide.es/s/?q=${look}&searchSource=3`
   const browser = await puppeteer.launch({
@@ -80,14 +79,13 @@ export const scrapeWebsiteGetYourGuide = async (look) => {
       if (titleElement && priceElement && imgElement) {
         const title = titleElement.innerText.trim()
         const price = priceElement.innerText.trim().replace(/COL\$/, '').trim()
-        const description = 'null'
         const imgSrc = imgElement.getAttribute('src')
         const containsWord = look
           .split(' ')
           .some((word) => title.toLowerCase().includes(word.toLowerCase()))
 
         if (containsWord) {
-          return { title, description, price, imgSrc } // Devolver el primer resultado que cumple la condición
+          return { title, price, imgSrc } // Devolver el primer resultado que cumple la condición
         }
       }
     }
@@ -97,13 +95,20 @@ export const scrapeWebsiteGetYourGuide = async (look) => {
   await browser.close()
 
   // Asegurar que se sanitiza el resultado antes de devolverlo
-  const sanitizedData = data ? sanitizeGetYourGuide(data) : {}
-  return sanitizedData
+  if (data) {
+    // Asegurar que se sanitiza el resultado antes de devolverlo
+    const sanitizedData = sanitizeGetYourGuide(data)
+    // Generar la descripción
+    const description = await generateDescriptionAttraction(sanitizedData.title)
+    // Agregar la descripción al objeto de datos resultante
+    sanitizedData.description = description
+    return sanitizedData
+  }
 }
 
 /* (async () => {
-  const look = 'snorkel cartagena'
+  const look = 'Cartagena: Full-Day Boat Trip to 5 Rosario Islands'
   const tour2 = await scrapeWebsiteGetYourGuide(look)
   console.log(tour2)
-})() */
-
+})()
+ */

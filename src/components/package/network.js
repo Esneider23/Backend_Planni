@@ -1,9 +1,10 @@
 import { Router } from 'express'
-import { scrapeWebsiteController, getPackages } from './controller.js'
+import { scrapeWebsiteController, getPackage, getPackages } from './controller.js'
 
 const packageRouter = Router()
 
 packageRouter.post('/', scrapeWebsiteController)
-packageRouter.get('/:id', getPackages)
+packageRouter.get('/:id', getPackage)
+packageRouter.get('/', getPackages)
 
 export { packageRouter }

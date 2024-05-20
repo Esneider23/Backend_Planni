@@ -6,6 +6,7 @@ import {
 } from '../../utils/webScraping/scraping.js'
 import { getDescriptionsAndImages } from '../../utils/getTripAdvisor/getTrip.js'
 import { packagesConsults } from '../../db/consults_package.js'
+import { generateDescriptionRestaurant } from '../../utils/webScraping/generateDescribe.js'
 
 const scrapeWebsite = async (cityNames, contextUser, maxBudget) => {
   const getNameOfInfo = await getInfo(cityNames, contextUser)
@@ -22,9 +23,9 @@ const scrapeWebsite = async (cityNames, contextUser, maxBudget) => {
           const scrapeResult = await scrapeWebsiteGoogleHotels(hotelName)
           const additionalInfo = await getDescriptionsAndImages(hotelId)
           hotelInfo = {
-            id: hotelId,
-            name: hotelName,
-            description: additionalInfo.description,
+            id_hotels: hotelId,
+            name_hotels: hotelName,
+            description_hotels: additionalInfo.description,
             price: scrapeResult.price,
             imageUrl: additionalInfo.images
           }
@@ -49,13 +50,12 @@ const scrapeWebsite = async (cityNames, contextUser, maxBudget) => {
         if (!attractionInfo) {
           const result = await scrapeWebsiteGetYourGuide(attractionName)
           attractionInfo = {
-            id: attractionId,
-            name: result.title,
-            description: result.description,
-            price: result.price,
-            imageUrl: result.src
+            id_attractions: attractionId,
+            name_attractions: result.title,
+            description_attractions: result.description,
+            price_attraction: result.price,
+            imgsrc_attraction: result.src
           }
-
           await packagesConsults.createAtraction(attractionInfo)
         }
         return attractionInfo
@@ -75,9 +75,9 @@ const scrapeWebsite = async (cityNames, contextUser, maxBudget) => {
         let restaurantInfo = await packagesConsults.getRestaurant({ id: key })
         if (!restaurantInfo) {
           restaurantInfo = {
-            id: key,
-            name: restaurantsInfo[key],
-            description: 'Restaurant description',
+            id_restaurant: key,
+            name_restaurant: restaurantsInfo[key],
+            description_restaurant: await generateDescriptionRestaurant(restaurantsInfo[key]),
             price: formattedPrice
           }
           await packagesConsults.createRestaurant(restaurantInfo)
@@ -147,12 +147,14 @@ export const scrapeWebsiteController = async (req, res) => {
                   {
                     id: attractions[i].id_attractions,
                     name: attractions[i].name_attractions,
+                    description: attractions[i].description_attractions,
                     price: attraction1Price,
                     imgSrc: attractions[i].imgsrc_attraction
                   },
                   {
                     id: attractions[j].id_attractions,
                     name: attractions[j].name_attractions,
+                    description: attractions[j].description_attractions,
                     price: attraction2Price,
                     imgSrc: attractions[j].imgsrc_attraction
                   }
@@ -160,6 +162,7 @@ export const scrapeWebsiteController = async (req, res) => {
                 restaurant: {
                   id: restaurant.id_restaurant,
                   name: restaurant.name_restaurant,
+                  description: restaurant.description_restaurant,
                   price: restaurantPrice
                 },
                 totalCost: totalPrice
@@ -192,7 +195,7 @@ export const scrapeWebsiteController = async (req, res) => {
   }
 }
 
-export const getPackages = async (req, res) => {
+export const getPackage = async (req, res) => {
   const { id } = req.params; 
 
   try {
@@ -201,7 +204,7 @@ export const getPackages = async (req, res) => {
       return response.error(res, 'Invalid package ID');
     }
 
-    const packages = await packagesConsults.getPackages(idPackage);
+    const packages = await packagesConsults.getPackage(idPackage);
     if (!packages) {
       return response.error(res, 'Package not found');
     }
@@ -211,3 +214,12 @@ export const getPackages = async (req, res) => {
     response.error(res, 'Error fetching package', error);
   }
 };
+
+export const getPackages = async (req, res) => {
+  try {
+    const packages = await packagesConsults.getpackages();
+    response.success(res, 'Packages fetched successfully', packages);
+  } catch (error) {
+    response.error(res, 'Error fetching packages', error);
+  }
+}

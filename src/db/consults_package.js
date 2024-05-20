@@ -22,12 +22,12 @@ const getHotels = async (hotelData) => {
 }
 
 const createHotel = async (hotelData) => {
-  const { id, name, description, price, imageUrl } = hotelData
+  const { id_hotels, name_hotels, description_hotels, price, imageUrl } = hotelData
   const insertQuery = `
     INSERT INTO hotels (id_hotels, name_hotels, description_hotels, price, imageurl)
     VALUES ($1, $2, $3, $4, $5)
   `
-  const values = [id, name, description, price, imageUrl]
+  const values = [id_hotels, name_hotels, description_hotels, price, imageUrl]
   try {
     await client.query(insertQuery, values)
   } catch (error) {
@@ -54,12 +54,12 @@ const getAtraction = async (idAttraction) => {
 }
 
 const createAtraction = async (attractionInfo) => {
-  const { id, name, description, price, imageUrl } = attractionInfo
+  const { id_attractions, name_attractions, description_attractions, price_attraction, imgsrc_attraction } = attractionInfo
   const insertQuery = `
     INSERT INTO attractions (id_attractions, name_attractions, description_attractions, price_attraction, imgsrc_attraction)
     VALUES ($1, $2, $3, $4, $5)
   `
-  const values = [id, name, description, price, imageUrl]
+  const values = [id_attractions, name_attractions, description_attractions, price_attraction, imgsrc_attraction]
   try {
     await client.query(insertQuery, values)
   } catch (error) {
@@ -86,13 +86,12 @@ const getRestaurant = async (idRestaurant) => {
 }
 
 const createRestaurant = async (restaurantInfo) => {
-  const { id, name, description, price } = restaurantInfo
-  console.log(restaurantInfo)
+  const { id_restaurant, name_restaurant, description_restaurant, price } = restaurantInfo
   const insertQuery = `
       INSERT INTO restaurant (id_restaurant, name_restaurant, description_restaurant, price)
       VALUES ($1, $2, $3, $4)
     `
-  const values = [id, name, description, price]
+  const values = [id_restaurant, name_restaurant, description_restaurant, price]
   try {
     await client.query(insertQuery, values)
   } catch (error) {
@@ -101,7 +100,7 @@ const createRestaurant = async (restaurantInfo) => {
   }
 }
 
-const getPackages = async (idPackage) => {
+const getPackage = async (idPackage) => {
   const query = `
     SELECT
         p.id_package,
@@ -143,30 +142,30 @@ const getPackages = async (idPackage) => {
     } else {
       const packageData = rows[0];
       const response = {
+        id: packageData.id_package,
         hotel: {
-          id: packageData.id_hotels,
           name: packageData.name_hotels,
           price: packageData.price_hotels,
           description: packageData.description_hotels,
           imageUrl: packageData.hotels
         },
         restaurant: {
-          id: packageData.id_restaurant,
           name: packageData.name_restaurant,
-          price: packageData.price_restaurant
+          price: packageData.price_restaurant,
+          decription: packageData.description_restaurant
         },
         attractions: [
           {
-            id: packageData.id_attraction1,
             name: packageData.name_attraction1,
             price: packageData.price_attraction1,
+            description: packageData.description_attraction1,
             imgSrc: packageData.img_attraction1
           },
           {
-            id: packageData.id_attraction2,
             name: packageData.name_attraction2,
             price: packageData.price_attraction2,
-            imgSrc: packageData.img_attraction2
+            imgSrc: packageData.img_attraction2,
+            description: packageData.description_attraction2
           }
         ],
         totalCost: packageData.price_package
@@ -197,6 +196,49 @@ const createPackage = async (packageInfo) => {
   }
 }
 
+const getpackages = async () => {
+  const query = `
+  SELECT
+    p.id_package,
+    h.name_hotels,
+    h.imageurl, 
+    a1.name_attractions,
+    p.price_package
+    FROM
+    package p
+    LEFT JOIN
+      hotels h ON p.id_hotels = h.id_hotels
+    LEFT JOIN
+      restaurant  r ON p.id_restaurant = r.id_restaurant
+    LEFT JOIN
+      attractions a1 ON p.id_attraction = a1.id_attractions
+    limit 6;
+  `;
+
+  try {
+    const { rows } = await client.query(query);
+    const packages = rows.map((packageData) => {
+      return {
+        id: packageData.id_package,
+        hotel: {
+          name: packageData.name_hotels,
+          imageUrl: packageData.imageurl
+        },
+        attractions:
+          {
+            name: packageData.name_attractions,
+          },
+        totalCost: packageData.price_package
+      };
+    });
+
+    return packages;
+  } catch (error) {
+    console.error('Error fetching packages:', error);
+    throw error;
+  }
+}
+
 export const packagesConsults = {
   getHotels,
   createHotel,
@@ -204,6 +246,7 @@ export const packagesConsults = {
   createAtraction,
   getRestaurant,
   createRestaurant,
-  getPackages,
-  createPackage
+  getPackage,
+  createPackage,
+  getpackages
 }
