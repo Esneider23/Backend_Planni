@@ -1,7 +1,8 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { env } from '../../options/env.js'
 
 // Accede a tu clave de API como una variable de entorno
-const genAI = new GoogleGenerativeAI("AIzaSyD4yUFzCRr3abCqRG2dqydlrZ0I9fPs-4g");
+const genAI = new GoogleGenerativeAI(env.KEY_GOOGLEAI);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
 export const generateDescriptionAttraction = async (title) => {
