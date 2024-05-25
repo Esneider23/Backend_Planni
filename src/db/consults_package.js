@@ -179,22 +179,23 @@ const getPackage = async (idPackage) => {
   }
 };
 
-
 const createPackage = async (packageInfo) => {
-  const {hotelId, idAttraction, idAttraction2 , restaurantId, pricePackage } =
-    packageInfo
+  const { hotelId, idAttraction, idAttraction2, restaurantId, pricePackage } = packageInfo;
   const insertQuery = `
     INSERT INTO package (id_hotels, id_attraction, id_attraction2, id_restaurant, price_package)
-    VALUES ($1, $2, $3, $4, $5)
-  `
-  const values = [hotelId, idAttraction, idAttraction2, restaurantId, pricePackage]
+    VALUES ($1, $2, $3, $4, $5) RETURNING id_package;
+  `;
+  const values = [hotelId, idAttraction, idAttraction2, restaurantId, pricePackage];
+
   try {
-    await client.query(insertQuery, values)
+    const result = await client.query(insertQuery, values);
+    return result.rows[0].id_package;
   } catch (error) {
-    console.error('Error creating package:', error)
-    throw error
+    console.error('Error creating package:', error);
+    throw error;
   }
-}
+};
+
 
 const getpackages = async () => {
   const query = `

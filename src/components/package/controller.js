@@ -97,43 +97,33 @@ const scrapeWebsite = async (cityNames, contextUser, maxBudget) => {
 }
 
 export const scrapeWebsiteController = async (req, res) => {
-  const { cityNames, contextUser, maxBudget } = req.body
+  const { cityNames, contextUser, maxBudget } = req.body;
 
   try {
-    const data = await scrapeWebsite(cityNames, contextUser, maxBudget)
-    const hotels = data.hotels.filter((hotel) => !hotel.error)
-    const attractions = data.attractions.filter(
-      (attraction) => !attraction.error
-    )
-    const restaurants = data.restaurants.filter(
-      (restaurant) => !restaurant.error
-    )
+    const data = await scrapeWebsite(cityNames, contextUser, maxBudget);
+    const hotels = data.hotels.filter((hotel) => !hotel.error);
+    const attractions = data.attractions.filter((attraction) => !attraction.error);
+    const restaurants = data.restaurants.filter((restaurant) => !restaurant.error);
 
-    const packages = []
+    const packages = [];
 
     for (const hotel of hotels) {
-      const hotelPackages = []
+      const hotelPackages = [];
 
       for (let i = 0; i < attractions.length; i++) {
         for (let j = i + 1; j < attractions.length; j++) {
           for (const restaurant of restaurants) {
-            const hotelPrice = parseFloat(hotel.price)
-            const attraction1Price = parseFloat(attractions[i].price_attraction)
-            const attraction2Price = parseFloat(attractions[j].price_attraction)
-            const restaurantPrice = parseFloat(restaurant.price)
+            const hotelPrice = parseFloat(hotel.price);
+            const attraction1Price = parseFloat(attractions[i].price_attraction);
+            const attraction2Price = parseFloat(attractions[j].price_attraction);
+            const restaurantPrice = parseFloat(restaurant.price);
 
-            if (
-              isNaN(hotelPrice) ||
-              isNaN(attraction1Price) ||
-              isNaN(attraction2Price) ||
-              isNaN(restaurantPrice)
-            ) {
-              console.log('Precio inválido detectado, omitiendo paquete:')
-              continue
+            if (isNaN(hotelPrice) || isNaN(attraction1Price) || isNaN(attraction2Price) || isNaN(restaurantPrice)) {
+              console.log('Precio inválido detectado, omitiendo paquete:');
+              continue;
             }
 
-            const totalPrice =
-              hotelPrice + attraction1Price + attraction2Price + restaurantPrice
+            const totalPrice = hotelPrice + attraction1Price + attraction2Price + restaurantPrice;
             if (totalPrice <= maxBudget) {
               hotelPackages.push({
                 hotel: {
@@ -166,34 +156,34 @@ export const scrapeWebsiteController = async (req, res) => {
                   price: restaurantPrice
                 },
                 totalCost: totalPrice
-              })
+              });
             }
           }
         }
       }
 
-      // Encontrar el paquete más económico para este hotel
-      const cheapestPackage = hotelPackages.sort(
-        (a, b) => a.totalCost - b.totalCost
-      )[0]
+      const cheapestPackage = hotelPackages.sort((a, b) => a.totalCost - b.totalCost)[0];
       if (cheapestPackage) {
-        packages.push(cheapestPackage)
-        // Crear y guardar el paquete en la base de datos
-        await packagesConsults.createPackage({
+        const packageId = await packagesConsults.createPackage({
           hotelId: cheapestPackage.hotel.id,
           idAttraction: cheapestPackage.attractions[0].id,
           idAttraction2: cheapestPackage.attractions[1].id,
           restaurantId: cheapestPackage.restaurant.id,
           pricePackage: cheapestPackage.totalCost
-        })
+        });
+        
+        packages.push({
+          id_package: packageId,
+          ...cheapestPackage
+        });
       }
     }
-
-    response.success(res, 'packages', packages)
+    response.success(res, 'packages', packages);
   } catch (error) {
-    response.error(res, 'Error: ', error)
+    response.error(res, 'Error: ', error);
   }
-}
+};
+
 
 export const getPackage = async (req, res) => {
   const { id } = req.params; 
