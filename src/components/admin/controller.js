@@ -45,4 +45,14 @@ const deleteUserController = async (req, res) => {
   }
 }
 
-export { AllUsersController, createUserController, deleteUserController, updateUserController }
+const createPackageController = async (req, res) => {
+  const { idPackage, idHotels, idRestaurant, idAttraction, idAttraction2, pricePackage } = req.query
+  try {
+    const createPackeg = await consults.createPackage(idPackage, idHotels, idRestaurant, idAttraction, idAttraction2, pricePackage)
+    res.json(createPackeg)
+  } catch (error) {
+    res.status(500).json({ message: 'Error al crear un usuario', error: error.message })
+  }
+}
+
+export { AllUsersController, createUserController, deleteUserController, updateUserController, createPackageController }
