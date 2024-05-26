@@ -188,6 +188,12 @@ const validateUser = async (username, password) => {
   }
 }
 
+// Obtener usuario por email
+
+
+
+
+
 export const consults = {
   getUser,
   createUserClient,

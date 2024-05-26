@@ -30,8 +30,11 @@ export const scrapeWebsiteGoogleHotels = async (look) => {
     const titleElement = $(el).find('.QT7m7 > h2')
     const priceElement = $(el).find('.kixHKb span').first()
     const priceText = priceElement.text().trim()
+    const pricePattern = /^\$ ([0-9]+)\.([0-9]+)(\.[0-9]+)*$/
 
-    if (/^\$\s*\d{1,3}(\.\d{3})*$/.test(priceText)) {
+    console.log('priceText', `"${priceText}"`, pricePattern.test(priceText)) // Debu
+
+    if (pricePattern.test(priceText)) {
       firstHotelFound = sanitize({
         title: titleElement.text(),
         price: priceText.replace(/\D/g, '')

@@ -8,7 +8,7 @@ const client = new pkg.Client({
   password: env.DB_PASSWORD,
   database: env.DB_DATABASE,
   ssl: {
-    rejectUnauthorized: env.SSL_REJECT_UNAUTHORIZED
+    rejectUnauthorized: false
   }
 })
 
