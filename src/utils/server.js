@@ -1,4 +1,4 @@
-import { db } from '../db/conect.js'
+import { db } from '../db/connect.js'
 import { env } from '../options/env.js'
 
 const server = async (app) => {

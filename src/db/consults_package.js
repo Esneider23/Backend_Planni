@@ -1,4 +1,4 @@
-import { db } from './conect.js'
+import { db } from './connect.js'
 
 const client = db.client
 

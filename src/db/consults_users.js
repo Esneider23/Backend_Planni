@@ -1,4 +1,4 @@
-import { db } from './conect.js'
+import { db } from './connect.js'
 import { compareHash } from '../utils/bcrypt/compareHash.js'
 import {name, generateRandomUsername} from '../utils/users.js/users.js'
 import { hashPassword } from '../utils/bcrypt/hashPassword.js'
