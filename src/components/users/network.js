@@ -1,9 +1,15 @@
 import {Router} from 'express'
+import { deleteUser, getUserAll, getFilterByRol,
+    getFilterByUsername
+ } from './controller.js'
 
-const Users = Router()
+const userRouter = Router()
 
-Users.delete('/admin/:id' , )
+userRouter.get('/', getUserAll)
+userRouter.get('/:rol', getFilterByRol)
+userRouter.get('/:username', getFilterByUsername)
+userRouter.delete('/:id' , deleteUser)
 
 
 
-export {Users}
+export {userRouter}
