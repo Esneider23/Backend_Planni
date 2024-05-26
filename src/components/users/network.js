@@ -6,8 +6,8 @@ import { deleteUser, getUserAll, getFilterByRol,
 const userRouter = Router()
 
 userRouter.get('/', getUserAll)
-userRouter.get('/:rol', getFilterByRol)
-userRouter.get('/:username', getFilterByUsername)
+userRouter.get('/filter/rol/:rol', getFilterByRol)
+userRouter.get('/filter/user/:name', getFilterByUsername)
 userRouter.delete('/:id' , deleteUser)
 
 

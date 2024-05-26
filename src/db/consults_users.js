@@ -48,6 +48,20 @@ const getFilterByRol = async (rol) => {
   }
 }
 
+const getFilterByUsername = async (name_user) => {
+  try {
+    const query = {
+      text: 'SELECT users.id_users, users.username, users.name_user, users.lastname_user, users.id_country, users.email, users.password, users.phone, users.address, users.id_rol, rol.name_rol, country.name_country FROM users JOIN rol ON users.id_rol = rol.id_rol JOIN country on users.id_country = country.id_country WHERE users.name_user = $1',
+      values: [name_user]
+    };
+    const { rows } = await client.query(query);
+    return rows; // Retorna las filas obtenidas
+  } catch (error) {
+    console.error('[db] Error al consultar los usuarios por rol:', error.message);
+    throw error;
+  }
+}
+
 const createUserClient = async (email, password, id_country) => {
   try {
     const nameUser = await name(email)
@@ -100,20 +114,7 @@ const createUserOtherType = async (
   }
 }
 
-const getFilterByUsername = async (username) => {
-  try {
-    const query = {
-      text: 'SELECT users.id_users, users.username, users.name_user, users.lastname_user, users.id_country, users.email, users.password, users.phone, users.address, users.id_rol, rol.name_rol, country.name_country FROM users JOIN rol ON users.id_rol = rol.id_rol JOIN country on users.id_country = country.id_country WHERE users.name_user = $1',
-      values: [username]
-    };
-    const { rows } = await client.query(query);
-    console.log('[db] User found:', rows);
-    return rows; // Retorna las filas obtenidas
-  } catch (error) {
-    console.error('[db] Error al consultar los usuarios por rol:', error.message);
-    throw error;
-  }
-};
+
 
 
 // Codigo de api auth planni
