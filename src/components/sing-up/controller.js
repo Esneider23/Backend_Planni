@@ -62,7 +62,6 @@ const registryOtherUserType = async (req, res) => {
       address,
       id_rol
     )
-
     response.success(res, 'Password hashed', { hashedPassword, email })
   } catch (error) {
     response.error(res, error.message)

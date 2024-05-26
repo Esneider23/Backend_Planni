@@ -1,5 +1,7 @@
 import { response } from '../../network/response.js'
 import { consults } from '../../db/consults_users.js'
+import { consultsBuys } from '../../db/buy_package.js'
+import {buildPdf, generatePdfPath } from '../../utils/pdf/pdf.js'
 
 
 export const getUserAll = async (req, res) => {
@@ -72,6 +74,34 @@ export const updateUser = async (req, res) => {
     }
 }
 
+
+export const buysPackage = async (req, res) => {
+    const data = req.body;
+
+    try {
+        const buyIdPackage = await consultsBuys.buysPackage(data);
+        console.log('[controller] Buy package created', buyIdPackage);
+
+        const { filepath, filename } = generatePdfPath();
+        buildPdf(filepath, () => {
+            res.status(200).json({
+                success: true,
+                message: 'Package bought',
+                buyIdPackage,
+                pdfUrl: `../../utils/pdf/pdfs/${filename}`
+            });
+        });
+    } catch (error) {
+        console.error('[controller] Error al comprar paquete:', error.message);
+        res.status(500).json({
+            success: false,
+            message: 'Internal error',
+            error: error.message
+        });
+    }
+};
+
+
 export const deleteUser = async (req, res) => {
     const { id } = req.params
     try {
@@ -81,4 +111,3 @@ export const deleteUser = async (req, res) => {
         response.error(res, 500, 'Internal error', error)
     }
 }
-
