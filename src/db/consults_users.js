@@ -6,9 +6,11 @@ const client = db.client
 
 const getUser = async (email) => {
   try {
-    const query = 'SELECT * FROM users WHERE email = $1'
-    const values = [email]
-    const { rows } = await client.query(query, values)
+    const query = {
+      text: 'SELECT * FROM users WHERE email = $1',
+      values: [email]
+    }
+    const { rows } = await client.query(query)
     return rows
   } catch (error) {
     // Manejar el error
