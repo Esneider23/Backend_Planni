@@ -1,6 +1,7 @@
 import { db } from './conect.js'
 import { compareHash } from '../utils/bcrypt/compareHash.js'
 import {name, generateRandomUsername} from '../utils/users.js/users.js'
+import { hashPassword } from '../utils/bcrypt/hashPassword.js'
 
 const client = db.client
 
@@ -180,6 +181,32 @@ const deleteUser = async (id) => {
   }
 }
 
+const updateUser = async (id, userData) => {
+  const { username, name_user, lastname_user, id_country, email, password, phone, address, id_rol } = userData;
+  try {
+    const existingUser = await getUser(email);
+    
+    // Validar si el email ya existe en otro usuario
+    if (existingUser.length === 1 && existingUser[0].id_users !== id) {
+      return "User already exists";
+    }
+
+    // Hashear la contraseña antes de actualizar
+    const hashedPassword = await hashPassword(password);
+
+    const query = {
+      text: 'UPDATE users SET username = $1, name_user = $2, lastname_user = $3, id_country = $4, email = $5, password = $6, phone = $7, address = $8, id_rol = $9 WHERE id_users = $10 RETURNING *',
+      values: [username, name_user, lastname_user, id_country, email, hashedPassword, phone, address, id_rol, id]
+    };
+    const { rows } = await client.query(query);
+    console.log('[db] Updated user', rows[0]);
+    return rows[0];
+  } catch (error) {
+    console.error('[db] Error al actualizar usuario:', error.message);
+    throw error;
+  }
+};
+
 export const consults = {
   getUser,
   getUserAll,
@@ -190,5 +217,6 @@ export const consults = {
   getUserByUsername,
   validateUser,
   validateAccount,
-  deleteUser
+  deleteUser,
+  updateUser
 }

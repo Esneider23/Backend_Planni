@@ -61,6 +61,17 @@ export const getFilterByUsername = async (req, res) => {
     }
 }
 
+export const updateUser = async (req, res) => {
+    const { id } = req.params
+    const userData = req.body
+    try {
+        const user = await consults.updateUser(id, userData)
+        response.success(res, 200, user)
+    } catch (error) {
+        response.error(res, 500, 'Internal error', error)
+    }
+}
+
 export const deleteUser = async (req, res) => {
     const { id } = req.params
     try {
