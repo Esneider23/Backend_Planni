@@ -55,4 +55,14 @@ const createPackageController = async (req, res) => {
   }
 }
 
-export { AllUsersController, createUserController, deleteUserController, updateUserController, createPackageController }
+const deletePackageController = async ( req, res ) => {
+  const {id} = req.param
+  try {
+    const deletePac = await consults.deletePackage(id)
+    res.json(deletePac)
+  } catch (error) {
+    res.status(500).json({ message: 'Error al crear un usuario', error: error.message })
+  }
+}
+
+export { AllUsersController, createUserController, deleteUserController, updateUserController, createPackageController, deletePackageController }
