@@ -12,8 +12,7 @@ const buysPackage = async (data) => {
         const { rows } = await client.query(query);
         const buyIdPackage = rows[0].id_buy_package;
         const infoPackage = await consultsInfoPackage(buyIdPackage);
-        console.log(infoPackage);
-        return buyIdPackage;
+        return infoPackage;
     } catch (error) {
         console.error('[db] Error al comprar paquete:', error.message);
         throw error;
@@ -25,6 +24,7 @@ const consultsInfoPackage = async (id) => {
         const query = {
             text: 
             `SELECT
+            buy_package.id_buy_package,
             users.name_user,
             users.lastname_user,
             users.email,
@@ -44,7 +44,7 @@ const consultsInfoPackage = async (id) => {
             JOIN restaurant ON package.id_restaurant = restaurant.id_restaurant
             JOIN attractions AS attractions1 ON package.id_attraction = attractions1.id_attractions
             JOIN attractions AS attractions2 ON package.id_attraction2 = attractions2.id_attractions
-            WHERE buy_package.id_buy_package = $1`,  // Cambiado para filtrar por id_buy_package
+            WHERE buy_package.id_buy_package = $1`,
             values: [id]
         }
         const { rows } = await client.query(query);

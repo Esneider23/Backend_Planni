@@ -79,17 +79,24 @@ export const buysPackage = async (req, res) => {
     const data = req.body;
 
     try {
-        const buyIdPackage = await consultsBuys.buysPackage(data);
-        console.log('[controller] Buy package created', buyIdPackage);
-
+        const infoPackage = await consultsBuys.buysPackage(data);
+        console.log('infoPackage:', infoPackage);
         const { filepath, filename } = generatePdfPath();
-        buildPdf(filepath, () => {
-            res.status(200).json({
-                success: true,
-                message: 'Package bought',
-                buyIdPackage,
-                pdfUrl: `../../utils/pdf/pdfs/${filename}`
-            });
+        buildPdf(filepath, infoPackage, (err) => {
+            if (err) {
+                res.status(500).json({
+                    success: false,
+                    message: 'Error generating PDF',
+                    error: err.message
+                });
+            } else {
+                res.status(200).json({
+                    success: true,
+                    message: 'Package bought',
+                    buyIdPackage: infoPackage[0].id_buy_package,
+                    pdfUrl: `../../utils/pdf/pdfs/${filename}`
+                });
+            }
         });
     } catch (error) {
         console.error('[controller] Error al comprar paquete:', error.message);
@@ -100,7 +107,6 @@ export const buysPackage = async (req, res) => {
         });
     }
 };
-
 
 export const deleteUser = async (req, res) => {
     const { id } = req.params
