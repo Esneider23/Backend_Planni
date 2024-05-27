@@ -1,16 +1,108 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Documento PDF</title>
-    <!-- Enlace al archivo CSS -->
-    <link rel="stylesheet" href="../css/style.css" />
-  </head>
-  <body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documento PDF</title>
+  <!-- Enlace al archivo CSS -->
+  <link rel="stylesheet" href="../css/style.css" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+  <div class="wrapper__pdf">
     <div class="container">
-      <img class="logo" src="../image/logo.svg" alt="Logo" />
-      <div class="text">Planni esneider cv</div>
+      <img src="../image/logo.svg" alt="">
+      <div class="id__pdf">
+        <h1>Package Purchase Confirmation</h1>
+        <div>
+          <p><span style="font-weight: bold;">ID</span> {{id_buy_package}}</p>
+        </div>
+      </div>
     </div>
-  </body>
+    <div style="margin: 20px 30px; border: 1px solid #d33c25; border-radius: 20px; overflow: hidden;">
+      <div class="information__container">
+        <div style="border-right: 1px solid #d33c25;">
+          <span>Nombre</span>
+          <p>{{name_user}} {{lastname_user}}</p>
+        </div>
+        <div>
+          <span>Email</span>
+          <p>{{email}}</p>
+        </div>  
+      </div>
+      <div class="information__container" style="border-top: 1px solid #d33c25;">
+        <div style="border-right: 1px solid #d33c25;">
+          <span>Telefono</span>
+          <p>{{phone}}</p>
+        </div>
+        <div style="border-right: 1px solid #d33c25;">
+          <span>Direccion</span>
+          <p>{{address}}</p>
+        </div>  
+        <div>
+          <span>Pais</span>
+          <p>{{name_country}}</p>
+        </div>  
+      </div>
+
+    </div>
+
+    <div class="inf__turis">
+      <div class="container__inf__turis">
+        <div class="info_tick">
+          <h3>Hotel</h3>
+          <div>
+            <i class='bx bxs-hotel' style='color:#d33c25'  ></i>
+            <span>{{name_hotels}}</span>
+          </div>
+        </div>
+
+        <div class="info_tick">
+          <h3>Restaurante</h3>
+          <div>
+            <i class='bx bx-restaurant' style='color:#d33c25' ></i>
+            <span>{{name_restaurant}}</span>
+          </div>
+        </div>
+    
+      </div>
+
+      <div>
+        <fieldset>
+          <legend>Atracciones</legend>
+          <div class="container__inf__turis" style="margin-top: 0px;">
+            <div class="info_tick">
+              <div style="margin: 0; border: none;">
+                <i class='bx bxs-arch' style='color:#d33c25'></i>
+                <span>{{attraction1}}</span>
+              </div>
+            </div>
+    
+            <div class="info_tick" >
+              <div style="margin: 0; border: none;">
+                <i class='bx bxs-arch' style='color:#d33c25'></i>
+                <span>{{attraction2}}</span>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        
+        
+        </div>
+        
+        <div class="info_tick">
+          <div style="display: flex; flex-direction: row; justify-content: space-between;">
+            <h3 style="color: #d33c25;">Precio: <span style="color: #000; font-weight: 400;">{{price_package}}</span></h3>
+            <i class='bx bxs-purchase-tag' style='color:#d33c25' ></i>
+          </div>
+        </div>
+
+    </div>
+
+  </div>
+
+</body>
+
 </html>
