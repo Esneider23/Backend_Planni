@@ -17,5 +17,7 @@ export const env = {
   SECRET_KEY: process.env.SECRET_KEY,
   KEY_TRIPADVISOR: process.env.KEY_TRIPADVISOR,
   HOST_PRODUCTION: process.env.HOST_PRODUCTION,
-  LATLONG: process.env.LATLONG
+  LATLONG: process.env.LATLONG,
+  MAILUSER: process.env.MAILUSER,
+  MAILPASS: process.env.MAILPASS,
 }

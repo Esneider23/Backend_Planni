@@ -3,6 +3,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import pdf from 'html-pdf';
+import nodemailer from 'nodemailer';
+import { env } from '../../options/env.js';
 
 // Definir __dirname para módulos ES
 const __filename = fileURLToPath(import.meta.url);
@@ -45,6 +47,42 @@ export function buildPdf(filepath, infoPackage, callback) {
         } else {
             console.log('[buildPdfFromHtml] PDF generado exitosamente.');
             callback(null);
+        }
+    });
+}
+
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: env.MAILUSER,
+        pass: env.MAILPASS
+    }
+    
+});
+
+export const sendEmailWithPdf = (email, filepath, name, callback) => {
+    const mailOptions = {
+        from: 'tu_correo@gmail.com',
+        to: email,
+        subject: 'Confirmación de compra del paquete',
+        text: 'Adjunto encontrarás la confirmación de tu compra.',
+        attachments: [
+            {
+                filename: name,
+                path: filepath
+            }
+        ]
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error('[sendEmailWithPdf] Error al enviar correo:', error);
+            callback(error);
+        } else {
+            console.log('[sendEmailWithPdf] Correo enviado:', info.response);
+            callback(null, info);
         }
     });
 }

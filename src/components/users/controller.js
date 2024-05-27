@@ -1,7 +1,7 @@
 import { response } from '../../network/response.js'
 import { consults } from '../../db/consults_users.js'
 import { consultsBuys } from '../../db/buy_package.js'
-import {buildPdf, generatePdfPath } from '../../utils/pdf/pdf.js'
+import {buildPdf, generatePdfPath, sendEmailWithPdf } from '../../utils/pdf/pdf.js'
 
 
 export const getUserAll = async (req, res) => {
@@ -84,19 +84,30 @@ export const buysPackage = async (req, res) => {
         const { filepath, filename } = generatePdfPath();
         buildPdf(filepath, infoPackage, (err) => {
             if (err) {
-                res.status(500).json({
+                return res.status(500).json({
                     success: false,
                     message: 'Error generating PDF',
                     error: err.message
                 });
-            } else {
+            }
+
+            // Enviar el PDF por correo electrónico
+            sendEmailWithPdf(infoPackage[0].email, filepath, filename, (err, info) => {
+                if (err) {
+                    return res.status(500).json({
+                        success: false,
+                        message: 'Error sending email',
+                        error: err.message
+                    });
+                }
+
                 res.status(200).json({
                     success: true,
-                    message: 'Package bought',
+                    message: 'Package bought and email sent',
                     buyIdPackage: infoPackage[0].id_buy_package,
                     pdfUrl: `../../utils/pdf/pdfs/${filename}`
                 });
-            }
+            });
         });
     } catch (error) {
         console.error('[controller] Error al comprar paquete:', error.message);
