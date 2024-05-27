@@ -1,5 +1,6 @@
 import { response } from '../../network/response.js'
 import { consults } from '../../db/consults_users.js'
+import { packagesConsults } from '../../db/consults_package.js'
 import { consultsBuys } from '../../db/buy_package.js'
 import {buildPdf, generatePdfPath, sendEmailWithPdf } from '../../utils/pdf/pdf.js'
 
@@ -123,8 +124,40 @@ export const deleteUser = async (req, res) => {
     const { id } = req.params
     try {
         await consults.deleteUser(id)
-        response.success(res, 200, 'User deleted')
+        response.success(res, 'User deleted: ', id, 200)
     } catch (error) {
-        response.error(res, 500, 'Internal error', error)
+        response.error(res, 'Internal error', error, 500)
+    }
+}
+
+export const createPackageController = async (req, res) => {
+    const packageInfo = req.query
+    try {
+      const createPackeg = await consults.createPackage(packageInfo)
+      response.success(res, "Paquete aptualizado con exito", createPackeg, 200)
+    } catch (error) {
+      response.error(res, 'Internal error', error, 500)
+    }
+}
+
+export const deletePackageController = async ( req, res ) => {
+    const {id} = req.params
+    console.log(id)
+    try {
+      const deletePac = await packagesConsults.deletePackage(id)
+      response.success(res, "paquete eliminado con exito: ",deletePac, 200)
+    } catch (error) {
+      response.error(res, 'Internal error', error, 500)
+    }
+}
+
+export const updatePackageController = async ( req, res ) => {
+    const { idHotels, idRestaurant, idAttraction, idAttraction2, pricePackage } = req.query
+    const {id} = req.params
+    try {
+      const updatePac = await consults.updatePackage(id, idHotels, idRestaurant, idAttraction, idAttraction2, pricePackage)
+      response.success(res,"Update package: ", updatePac, 200)
+    } catch (error) {
+      response.success(res, 'Internal error', error, 500)
     }
 }

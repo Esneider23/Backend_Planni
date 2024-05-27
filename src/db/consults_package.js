@@ -22,7 +22,8 @@ const getHotels = async (hotelData) => {
 }
 
 const createHotel = async (hotelData) => {
-  const { id_hotels, name_hotels, description_hotels, price, imageUrl } = hotelData
+  const { id_hotels, name_hotels, description_hotels, price, imageUrl } =
+    hotelData
   const insertQuery = `
     INSERT INTO hotels (id_hotels, name_hotels, description_hotels, price, imageurl)
     VALUES ($1, $2, $3, $4, $5)
@@ -54,12 +55,24 @@ const getAtraction = async (idAttraction) => {
 }
 
 const createAtraction = async (attractionInfo) => {
-  const { id_attractions, name_attractions, description_attractions, price_attraction, imgsrc_attraction } = attractionInfo
+  const {
+    id_attractions,
+    name_attractions,
+    description_attractions,
+    price_attraction,
+    imgsrc_attraction
+  } = attractionInfo
   const insertQuery = `
     INSERT INTO attractions (id_attractions, name_attractions, description_attractions, price_attraction, imgsrc_attraction)
     VALUES ($1, $2, $3, $4, $5)
   `
-  const values = [id_attractions, name_attractions, description_attractions, price_attraction, imgsrc_attraction]
+  const values = [
+    id_attractions,
+    name_attractions,
+    description_attractions,
+    price_attraction,
+    imgsrc_attraction
+  ]
   try {
     await client.query(insertQuery, values)
   } catch (error) {
@@ -86,7 +99,8 @@ const getRestaurant = async (idRestaurant) => {
 }
 
 const createRestaurant = async (restaurantInfo) => {
-  const { id_restaurant, name_restaurant, description_restaurant, price } = restaurantInfo
+  const { id_restaurant, name_restaurant, description_restaurant, price } =
+    restaurantInfo
   const insertQuery = `
       INSERT INTO restaurant (id_restaurant, name_restaurant, description_restaurant, price)
       VALUES ($1, $2, $3, $4)
@@ -132,15 +146,15 @@ const getPackage = async (idPackage) => {
         attractions a2 ON p.id_attraction2 = a2.id_attractions
     WHERE
         p.id_package = $1;
-  `;
-  const values = [idPackage];
-  
+  `
+  const values = [idPackage]
+
   try {
-    const { rows } = await client.query(query, values);
+    const { rows } = await client.query(query, values)
     if (rows.length === 0) {
-      return null;
+      return null
     } else {
-      const packageData = rows[0];
+      const packageData = rows[0]
       const response = {
         id: packageData.id_package,
         hotel: {
@@ -169,33 +183,39 @@ const getPackage = async (idPackage) => {
           }
         ],
         totalCost: packageData.price_package
-      };
-  
-      return response;
+      }
+
+      return response
     }
   } catch (error) {
-    console.error('Error fetching package:', error);
-    throw error;
+    console.error('Error fetching package:', error)
+    throw error
   }
-};
+}
 
 const createPackage = async (packageInfo) => {
-  const { hotelId, idAttraction, idAttraction2, restaurantId, pricePackage } = packageInfo;
+  const { hotelId, idAttraction, idAttraction2, restaurantId, pricePackage } =
+    packageInfo
   const insertQuery = `
     INSERT INTO package (id_hotels, id_attraction, id_attraction2, id_restaurant, price_package)
     VALUES ($1, $2, $3, $4, $5) RETURNING id_package;
-  `;
-  const values = [hotelId, idAttraction, idAttraction2, restaurantId, pricePackage];
+  `
+  const values = [
+    hotelId,
+    idAttraction,
+    idAttraction2,
+    restaurantId,
+    pricePackage
+  ]
 
   try {
-    const result = await client.query(insertQuery, values);
-    return result.rows[0].id_package;
+    const result = await client.query(insertQuery, values)
+    return result.rows[0].id_package
   } catch (error) {
-    console.error('Error creating package:', error);
-    throw error;
+    console.error('Error creating package:', error)
+    throw error
   }
-};
-
+}
 
 const getpackages = async () => {
   const query = `
@@ -214,10 +234,10 @@ const getpackages = async () => {
     LEFT JOIN
       attractions a1 ON p.id_attraction = a1.id_attractions
     limit 6;
-  `;
+  `
 
   try {
-    const { rows } = await client.query(query);
+    const { rows } = await client.query(query)
     const packages = rows.map((packageData) => {
       return {
         id: packageData.id_package,
@@ -225,18 +245,71 @@ const getpackages = async () => {
           name: packageData.name_hotels,
           imageUrl: packageData.imageurl
         },
-        attractions:
-          {
-            name: packageData.name_attractions,
-          },
+        attractions: {
+          name: packageData.name_attractions
+        },
         totalCost: packageData.price_package
-      };
-    });
+      }
+    })
 
-    return packages;
+    return packages
   } catch (error) {
-    console.error('Error fetching packages:', error);
-    throw error;
+    console.error('Error fetching packages:', error)
+    throw error
+  }
+}
+
+const deletePackage = async (id) => {
+  try {
+    const query = {
+      text: `DELETE FROM package WHERE id_package = $1`,
+      values: [id]
+    }
+    const { rows } = await client.query(query)
+    console.log('[db] se elimino el paquete', rows[0])
+    return rows[0]
+  } catch (error) {
+    console.error('[db] Error al eliminar el usuario:', error.message)
+    throw error
+  }
+}
+
+const updatePackage = async (
+  id,
+  idHotels,
+  idRestaurant,
+  idAttraction,
+  idAttraction2,
+  pricePackage
+) => {
+  try {
+    const query = `
+      UPDATE public."package" 
+      SET 
+        id_hotels = $2, 
+        id_restaurant = $3, 
+        id_attraction = $4, 
+        id_attraction2 = $5, 
+        price_package = $6, 
+      WHERE 
+        id_package = $1
+    `
+
+    const values = [
+      id,
+      idHotels,
+      idRestaurant,
+      idAttraction,
+      idAttraction2,
+      pricePackage
+    ]
+
+    const { rows } = await client.query(query, values)
+    console.log('[db] Paquete actualizado con éxito', rows[0])
+    return rows[0]
+  } catch (error) {
+    console.error('[db] Error al actualizar el paquete:', error.message)
+    throw error
   }
 }
 
@@ -249,5 +322,7 @@ export const packagesConsults = {
   createRestaurant,
   getPackage,
   createPackage,
-  getpackages
+  getpackages,
+  deletePackage,
+  updatePackage
 }
