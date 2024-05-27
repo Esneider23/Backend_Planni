@@ -8,6 +8,7 @@ const waitFor = (timeInMs) => new Promise((r) => setTimeout(r, timeInMs))
 
 export const scrapeWebsiteGoogleHotels = async (look) => {
   const GOOGLE_HOTEL = `https://www.google.com/travel/hotels?q=${encodeURIComponent(look)}&utm_campaign=sharing&utm_medium=link&utm_source=htls&ved=0CAAQ5JsGahcKEwiwocKUmrGFAxUAAAAAHQAAAAAQBQ&ts=CAEaIAoCGgASGhIUCgcI6A8QBRgZEgcI6A8QBRgeGAUyAggCKgkKBToDQ09QGgA&rp=OAE`
+  console.log(GOOGLE_HOTEL)
   const browser = await puppeteer.launch({ headless: true })
   const page = await browser.newPage()
   await page.goto(GOOGLE_HOTEL)
@@ -42,6 +43,7 @@ export const scrapeWebsiteGoogleHotels = async (look) => {
   if (!firstHotelFound) {
     return null // Devuelve null si no se encontró ningún hotel
   } else {
+    console.log(firstHotelFound)
     return firstHotelFound // Devuelve el primer hotel encontrado
   }
 }
@@ -102,6 +104,7 @@ export const scrapeWebsiteGetYourGuide = async (look) => {
     const description = await generateDescriptionAttraction(sanitizedData.title)
     // Agregar la descripción al objeto de datos resultante
     sanitizedData.description = description
+    console.log(sanitizedData)
     return sanitizedData
   }
 }

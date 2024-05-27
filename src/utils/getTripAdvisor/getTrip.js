@@ -6,9 +6,9 @@ import { getActivity } from '../deberta/consumDeberta.js'
 const apiBaseTripadvisor = 'https://api.content.tripadvisor.com/api/v1'
 const axiosConfig = {
   params: {
-    key: 'AD6F25D7C72646CE876259F8D804418A',
+    key: env.KEY_TRIPADVISOR,
     latLong: env.LATLONG,
-    radius: '750',
+    radius: '7.50',
     radiusUnit: 'km',
     language: 'es_CO'
   },
@@ -68,8 +68,7 @@ export const getTrip = async (cityNames, contextUser) => {
   try {
     const infoDeberta = await getActivity(cityNames, contextUser)
     const stringWords = infoDeberta.join(', ')
-    console.log(stringWords)
-    const category = ['hotels']
+    const category = ['hotels', 'restaurants', 'attractions']
 
     const results = {} // Objeto para almacenar los resultados por categoría
 
@@ -111,11 +110,3 @@ export const getDescriptionsAndImages = async (locationId) => {
     throw error
   }
 }
-
-
-(async () =>{
-  const cityNames = 'Cartagena'
-  const contextUser = ""
-  const info = await getTrip(cityNames, contextUser)
-  console.log(info)
-})(); 
