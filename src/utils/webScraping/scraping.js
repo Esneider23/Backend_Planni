@@ -1,20 +1,18 @@
 import puppeteer from 'puppeteer'
 import cheerio from 'cheerio'
-import { sanitize } from './sanitize.js'
+import { sanitize, sanitizeGetYourGuide } from './sanitize.js'
+import { generateDescriptionAttraction } from './generateDescribe.js'
 
 // eslint-disable-next-line promise/param-names
 const waitFor = (timeInMs) => new Promise((r) => setTimeout(r, timeInMs))
 
 export const scrapeWebsiteGoogleHotels = async (look) => {
-  const GOOGLE_HOTEL_PRICE = `https://www.google.com/travel/hotels?q=${encodeURIComponent(look)}&utm_campaign=sharing&utm_medium=link&utm_source=htls&ved=0CAAQ5JsGahcKEwiwocKUmrGFAxUAAAAAHQAAAAAQBQ&ts=CAEaIAoCGgASGhIUCgcI6A8QBRgZEgcI6A8QBRgeGAUyAggCKgkKBToDQ09QGgA&rp=OAE`
+  const GOOGLE_HOTEL = `https://www.google.com/travel/hotels?q=${encodeURIComponent(look)}&utm_campaign=sharing&utm_medium=link&utm_source=htls&ved=0CAAQ5JsGahcKEwiwocKUmrGFAxUAAAAAHQAAAAAQBQ&ts=CAEaIAoCGgASGhIUCgcI6A8QBRgZEgcI6A8QBRgeGAUyAggCKgkKBToDQ09QGgA&rp=OAE`
   const browser = await puppeteer.launch({ headless: true })
   const page = await browser.newPage()
+  await page.goto(GOOGLE_HOTEL)
 
-  await page.goto(GOOGLE_HOTEL_PRICE)
-
-  const buttonConsentReject = await page.$(
-    '.VfPpkd-LgbsSe[aria-label="Reject all"]'
-  )
+  const buttonConsentReject = await page.$('.VfPpkd-LgbsSe[aria-label="Reject all"]')
   if (buttonConsentReject) await buttonConsentReject.click()
   await waitFor(3000)
 
@@ -29,10 +27,9 @@ export const scrapeWebsiteGoogleHotels = async (look) => {
 
     const titleElement = $(el).find('.QT7m7 > h2')
     const priceElement = $(el).find('.kixHKb span').first()
-    const priceText = priceElement.text().trim()
-    const pricePattern = /^\$ ([0-9]+)\.([0-9]+)(\.[0-9]+)*$/
+    const priceText = priceElement.text().trim() // Extraer texto del precio
 
-    console.log('priceText', `"${priceText}"`, pricePattern.test(priceText)) // Debu
+    const pricePattern = /^(\$|COP)\s*\d{1,3}(?:[.,]\d{3})*(?:,\d{2})?$/ // /^COP|\$ (\d+)((\.|,)\d+)*$/
 
     if (pricePattern.test(priceText)) {
       firstHotelFound = sanitize({
@@ -76,17 +73,19 @@ export const scrapeWebsiteGetYourGuide = async (look) => {
     for (const card of cards) {
       const titleElement = card.querySelector('.vertical-activity-card__title')
       const priceElement = card.querySelector('.baseline-pricing__from--value')
-      if (titleElement && priceElement) {
+      const imgElement = card.querySelector(
+        '.vertical-activity-card__photo img'
+      )
+      if (titleElement && priceElement && imgElement) {
         const title = titleElement.innerText.trim()
         const price = priceElement.innerText.trim().replace(/COL\$/, '').trim()
-
-        // Verificar si el título contiene al menos una de las palabras de búsqueda
+        const imgSrc = imgElement.getAttribute('src')
         const containsWord = look
           .split(' ')
           .some((word) => title.toLowerCase().includes(word.toLowerCase()))
 
         if (containsWord) {
-          return { title, price } // Devolver el primer resultado que cumple la condición
+          return { title, price, imgSrc } // Devolver el primer resultado que cumple la condición
         }
       }
     }
@@ -96,14 +95,20 @@ export const scrapeWebsiteGetYourGuide = async (look) => {
   await browser.close()
 
   // Asegurar que se sanitiza el resultado antes de devolverlo
-  const sanitizedData = data ? sanitize(data) : {}
-  return sanitizedData
+  if (data) {
+    // Asegurar que se sanitiza el resultado antes de devolverlo
+    const sanitizedData = sanitizeGetYourGuide(data)
+    // Generar la descripción
+    const description = await generateDescriptionAttraction(sanitizedData.title)
+    // Agregar la descripción al objeto de datos resultante
+    sanitizedData.description = description
+    return sanitizedData
+  }
 }
 
 /* (async () => {
-  const look = 'snorkel cartagena'
-  console.log('Google Hotels:')
-  console.log('Viator:')
+  const look = 'Cartagena: Full-Day Boat Trip to 5 Rosario Islands'
   const tour2 = await scrapeWebsiteGetYourGuide(look)
   console.log(tour2)
-})() */
+})()
+ */

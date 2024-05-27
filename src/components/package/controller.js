@@ -4,207 +4,212 @@ import {
   scrapeWebsiteGoogleHotels,
   scrapeWebsiteGetYourGuide
 } from '../../utils/webScraping/scraping.js'
-/*
-export const scrapeWebsite = async (req, res) => {
-  res.setTimeout(1000 * 60 * 2, (res) => {
-    response.error(res, 'Timeout', 408)
-  })
+import { getDescriptionsAndImages } from '../../utils/getTripAdvisor/getTrip.js'
+import { packagesConsults } from '../../db/consults_package.js'
+import { generateDescriptionRestaurant } from '../../utils/webScraping/generateDescribe.js'
 
-  try {
-    const { cityNames, contextUser } = req.body
-    const getNameOfInfo = await getInfo(cityNames, contextUser)
-    const hotels = getNameOfInfo.hotels
-    const attractions = getNameOfInfo.attractions
-    const restaurantsInfo = getNameOfInfo.restaurants
+const scrapeWebsite = async (cityNames, contextUser, maxBudget) => {
+  const getNameOfInfo = await getInfo(cityNames, contextUser)
+  const hotels = getNameOfInfo.hotels
+  const attractions = getNameOfInfo.attractions
+  const restaurantsInfo = getNameOfInfo.restaurants
 
-    const hotelPromises = Object.entries(hotels).map(([hotelId, hotelName]) => {
-      return scrapeWebsiteGoogleHotels(hotelName).then((result) => {
-        return { [hotelId]: result }
-      })
-    })
-
-    const attractionPromises = Object.entries(attractions).map(
-      ([attractionId, attractionName]) => {
-        return scrapeWebsiteGetYourGuide(attractionName).then((result) => {
-          return { [attractionId]: result }
-        })
-      }
-    )
-
-    const hotelsResults = await Promise.all(hotelPromises)
-    const attractionsResults = await Promise.all(attractionPromises)
-
-    response.success(res, hotelsResults, attractionsResults)
-  } catch (error) {
-    response.error(res, error)
-  }
-}
-*/
-
-const scrapeWebsite = async (cityNames, contextUser) => {
-  try {
-    const getNameOfInfo = await getInfo(cityNames, contextUser)
-    const hotels = getNameOfInfo.hotels
-    const attractions = getNameOfInfo.attractions
-    const restaurantsInfo = getNameOfInfo.restaurants 
-    const hotelePromises = Object.entries(hotels).map(
-      ([hotelId, hotelName]) => {
-        return scrapeWebsiteGoogleHotels(hotelName).then((result) => {
-          return { [hotelId]: result }
-        })
-      }
-    )
-    let attractionResults = {}
-    for (const [attractionId, atraccionesName] of Object.entries(attractions)) {
+  const hotelsResults = await Promise.all(
+    Object.entries(hotels).map(async ([hotelId, hotelName]) => {
       try {
-        const result = await scrapeWebsiteGetYourGuide(atraccionesName)
-        attractionResults[attractionId] = result
-      } catch (error) {
-        console.error('Error scraping hotel:', atraccionesName, error)
-        attractionResults[attractionId] = { error: 'Failed to scrape data' }
-      }
-    }
-    const hotelsResults = await Promise.all(hotelePromises)
-    const data = {
-      hotels: hotelsResults,
-      attractions: attractionResults,
-      restaurants: restaurantsInfo
-    }
-    return data
-  } catch (error) {
-    return error
-  }
-}
+        let hotelInfo = await packagesConsults.getHotels({ id: hotelId })
 
-/* export const scrapeWebsiteController = async (req, res) => {
-  const { cityNames, contextUser, maxBudget } = req.body
-  try {
-    const data = await scrapeWebsite(cityNames, contextUser)
-    const hotels = data.hotels.map((hotel) => Object.values(hotel)[0])
-    const attractions = Object.values(data.attractions)
-    const restaurants = Object.keys(data.restaurants).map((key) => {
+        if (!hotelInfo) {
+          const scrapeResult = await scrapeWebsiteGoogleHotels(hotelName)
+          const additionalInfo = await getDescriptionsAndImages(hotelId)
+          hotelInfo = {
+            id_hotels: hotelId,
+            name_hotels: hotelName,
+            description_hotels: additionalInfo.description,
+            price: scrapeResult.price,
+            imageUrl: additionalInfo.images
+          }
+
+          await packagesConsults.createHotel(hotelInfo)
+        }
+        return hotelInfo
+      } catch (error) {
+        console.error('Error processing hotel:', hotelName, error)
+        return { id: hotelId, error: 'Failed to retrieve or save hotel data' }
+      }
+    })
+  )
+
+  const attractionResults = await Promise.all(
+    Object.entries(attractions).map(async ([attractionId, attractionName]) => {
+      try {
+        let attractionInfo = await packagesConsults.getAtraction({
+          id: attractionId
+        })
+
+        if (!attractionInfo) {
+          const result = await scrapeWebsiteGetYourGuide(attractionName)
+          attractionInfo = {
+            id_attractions: attractionId,
+            name_attractions: result.title,
+            description_attractions: result.description,
+            price_attraction: result.price,
+            imgsrc_attraction: result.src
+          }
+          await packagesConsults.createAtraction(attractionInfo)
+        }
+        return attractionInfo
+      } catch (error) {
+        console.error('Error scraping attraction:', attractionName, error)
+        return { id: attractionId, error: 'Failed to scrape data' }
+      }
+    })
+  )
+  const restaurantsData = await Promise.all(
+    Object.keys(restaurantsInfo).map(async (key) => {
       const minPrice = maxBudget * 0.1
       const maxPrice = maxBudget * 0.15
       const randomPrice = Math.random() * (maxPrice - minPrice) + minPrice
       const formattedPrice = Math.round(randomPrice * 100) / 100
-
-      return {
-        id: key,
-        name: data.restaurants[key],
-        price: formattedPrice
+      try {
+        let restaurantInfo = await packagesConsults.getRestaurant({ id: key })
+        if (!restaurantInfo) {
+          restaurantInfo = {
+            id_restaurant: key,
+            name_restaurant: restaurantsInfo[key],
+            description_restaurant: await generateDescriptionRestaurant(restaurantsInfo[key]),
+            price: formattedPrice
+          }
+          await packagesConsults.createRestaurant(restaurantInfo)
+        }
+        return restaurantInfo
+      } catch (error) {
+        console.error('Error processing restaurant:', error)
+        return { id: key, error: 'Failed to retrieve or save restaurant data' }
       }
     })
-    let packages = [] // Cambiado de 'package' a 'packages'
-    for (let hotel of hotels) {
-      for (let i = 0; i < attractions.length; i++) {
-        for (let j = i + 1; j < attractions.length; j++) {
-          for (let k = 0; k < restaurants.length; k++) {
-            for (let l = k + 1; l < restaurants.length; l++) {
-              let totalPrice =
-                hotel.price +
-                attractions[i].price +
-                attractions[j].price +
-                restaurants[k].price +
-                restaurants[l].price
-
-              if (totalPrice <= maxBudget) {
-                packages.push({
-                  hotel: hotel.title,
-                  attractions: [attractions[i].title, attractions[j].title],
-                  restaurants: [restaurants[k].name, restaurants[l].name],
-                  totalCost: totalPrice
-                })
-              }
-            }
-          }
-        }
-      }
-    }
-    response.success(res, 'packages', packages, 200)
-  } catch (error) {
-    response.error(req, 'Error: ', error, 500)
+  )
+  return {
+    hotels: hotelsResults,
+    attractions: attractionResults,
+    restaurants: restaurantsData
   }
-}  */
+}
 
 export const scrapeWebsiteController = async (req, res) => {
-  const { cityNames, contextUser, maxBudget } = req.body
+  const { cityNames, contextUser, maxBudget } = req.body;
+
   try {
-    const data = await scrapeWebsite(cityNames, contextUser)
-    const hotels = data.hotels.map((hotel) => ({
-      id: Object.keys(hotel)[0],
-      name: Object.values(hotel)[0].title,
-      price: Object.values(hotel)[0].price
-    }))
-    const attractions = Object.values(data.attractions).map((attraction) => ({
-      id: attraction.id,
-      name: attraction.title,
-      price: attraction.price
-    }))
+    const data = await scrapeWebsite(cityNames, contextUser, maxBudget);
+    const hotels = data.hotels.filter((hotel) => !hotel.error);
+    const attractions = data.attractions.filter((attraction) => !attraction.error);
+    const restaurants = data.restaurants.filter((restaurant) => !restaurant.error);
 
-    const restaurants = Object.keys(data.restaurants).map((key) => {
-      const minPrice = maxBudget * 0.1
-      const maxPrice = maxBudget * 0.15
-      const randomPrice = Math.random() * (maxPrice - minPrice) + minPrice
-      const formattedPrice = Math.round(randomPrice * 100) / 100
+    const packages = [];
 
-      return {
-        id: key,
-        name: data.restaurants[key],
-        price: formattedPrice
-      }
-    })
+    for (const hotel of hotels) {
+      const hotelPackages = [];
 
-    let packages = []
-    for (let hotel of hotels) {
-      let cheapestPackage = null
       for (let i = 0; i < attractions.length; i++) {
         for (let j = i + 1; j < attractions.length; j++) {
-          for (let restaurant of restaurants) {
-            let totalPrice =
-              hotel.price +
-              attractions[i].price +
-              attractions[j].price +
-              restaurant.price
+          for (const restaurant of restaurants) {
+            const hotelPrice = parseFloat(hotel.price);
+            const attraction1Price = parseFloat(attractions[i].price_attraction);
+            const attraction2Price = parseFloat(attractions[j].price_attraction);
+            const restaurantPrice = parseFloat(restaurant.price);
 
+            if (isNaN(hotelPrice) || isNaN(attraction1Price) || isNaN(attraction2Price) || isNaN(restaurantPrice)) {
+              console.log('Precio inválido detectado, omitiendo paquete:');
+              continue;
+            }
+
+            const totalPrice = hotelPrice + attraction1Price + attraction2Price + restaurantPrice;
             if (totalPrice <= maxBudget) {
-              let currentPackage = {
-                hotel: { id: hotel.id, name: hotel.name, price: hotel.price },
+              hotelPackages.push({
+                hotel: {
+                  id: hotel.id_hotels,
+                  name: hotel.name_hotels,
+                  price: hotelPrice,
+                  description: hotel.description_hotels,
+                  imageUrl: hotel.imageurl
+                },
                 attractions: [
                   {
-                    id: attractions[i].id,
-                    name: attractions[i].name,
-                    price: attractions[i].price
+                    id: attractions[i].id_attractions,
+                    name: attractions[i].name_attractions,
+                    description: attractions[i].description_attractions,
+                    price: attraction1Price,
+                    imgSrc: attractions[i].imgsrc_attraction
                   },
                   {
-                    id: attractions[j].id,
-                    name: attractions[j].name,
-                    price: attractions[j].price
+                    id: attractions[j].id_attractions,
+                    name: attractions[j].name_attractions,
+                    description: attractions[j].description_attractions,
+                    price: attraction2Price,
+                    imgSrc: attractions[j].imgsrc_attraction
                   }
                 ],
                 restaurant: {
-                  id: restaurant.id,
-                  name: restaurant.name,
-                  price: restaurant.price
+                  id: restaurant.id_restaurant,
+                  name: restaurant.name_restaurant,
+                  description: restaurant.description_restaurant,
+                  price: restaurantPrice
                 },
                 totalCost: totalPrice
-              }
-
-              if (
-                !cheapestPackage ||
-                currentPackage.totalCost < cheapestPackage.totalCost
-              ) {
-                cheapestPackage = currentPackage
-              }
+              });
             }
           }
         }
       }
+
+      const cheapestPackage = hotelPackages.sort((a, b) => a.totalCost - b.totalCost)[0];
       if (cheapestPackage) {
-        packages.push(cheapestPackage)
+        const packageId = await packagesConsults.createPackage({
+          hotelId: cheapestPackage.hotel.id,
+          idAttraction: cheapestPackage.attractions[0].id,
+          idAttraction2: cheapestPackage.attractions[1].id,
+          restaurantId: cheapestPackage.restaurant.id,
+          pricePackage: cheapestPackage.totalCost
+        });
+        
+        packages.push({
+          id_package: packageId,
+          ...cheapestPackage
+        });
       }
     }
-    response.success(res, 'packages', packages)
+    response.success(res, 'packages', packages);
   } catch (error) {
-    response.error(res, 'Error: ', error)
+    response.error(res, 'Error: ', error);
+  }
+};
+
+
+export const getPackage = async (req, res) => {
+  const { id } = req.params; 
+
+  try {
+    const idPackage = parseInt(id, 10);
+    if (isNaN(idPackage)) {
+      return response.error(res, 'Invalid package ID');
+    }
+
+    const packages = await packagesConsults.getPackage(idPackage);
+    if (!packages) {
+      return response.error(res, 'Package not found');
+    }
+
+    response.success(res, 'Packages fetched successfully', packages);
+  } catch (error) {
+    response.error(res, 'Error fetching package', error);
+  }
+};
+
+export const getPackages = async (req, res) => {
+  try {
+    const packages = await packagesConsults.getpackages();
+    response.success(res, 'Packages fetched successfully', packages);
+  } catch (error) {
+    response.error(res, 'Error fetching packages', error);
   }
 }

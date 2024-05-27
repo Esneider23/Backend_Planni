@@ -1,109 +1,71 @@
 import { response } from '../../network/response.js'
 import { hashPassword } from '../../utils/bcrypt/hashPassword.js'
-import { consults } from '../../db/consults.js'
+import { consults } from '../../db/consults_users.js'
 
 const registryUserClient = async (req, res) => {
   try {
-    const { password, password_conf: passwordConf, email, country } = req.body
+    const { password, password_conf: passwordConf, email, id_country } = req.body;
 
     if (password !== passwordConf) {
-      response.error(
+      return response.error(
         res,
         'Password and password confirmation do not match',
         400
-      )
+      );
     }
 
-    const hashedPassword = await hashPassword(password)
-    const responseDB = await consults.getUser(email)
+    const hashedPassword = await hashPassword(password);
+    const responseDB = await consults.getUser(email);
 
     if (responseDB.length === 1) {
-      response.error(res, 'User already exists', 400)
+      return response.error(res, 'User already exists', 400);
     }
 
-    await consults.createUserClient(email, hashedPassword, country)
+    await consults.createUserClient(email, hashedPassword, id_country);
 
-    response.success(res, 'Password hashed', { hashedPassword, email })
+    response.success(res, 'User created successfully', { email , hashedPassword });
   } catch (error) {
-    response.error(res, error.message)
+    response.error(res, error.message);
   }
-}
+};
+
 
 const registryOtherUserType = async (req, res) => {
   try {
     const {
       username,
-      name_user: nameUser,
-      lastname_user: lastnameUser,
-      id_country: idCountry,
+      name_user,
+      lastname_user,
+      id_country,
       email,
       password,
       phone,
-      addrees,
-      id_rol: idRol
+      address,
+      id_rol
     } = req.body
 
     const hashedPassword = await hashPassword(password)
     const responseDB = await consults.getUser(email)
 
     if (responseDB.length === 1) {
-      response.error(res, 'User already exists', 400)
+      return response.error(res, 'User already exists', 400)
     }
 
     await consults.createUserOtherType(
       username,
-      nameUser,
-      lastnameUser,
-      idCountry,
+      name_user,
+      lastname_user,
+      id_country,
       email,
       hashedPassword,
       phone,
-      addrees,
-      idRol
+      address,
+      id_rol
     )
-
     response.success(res, 'Password hashed', { hashedPassword, email })
   } catch (error) {
     response.error(res, error.message)
   }
 }
 
-const registrySupplierUser = async (req, res) => {
-  try {
-    const {
-      name_supplier: nameSupplier,
-      nit_supplier: nitSupplier,
-      email_supplier: emailSupplier,
-      id_country_supplier: idCountrySupplier,
-      addres_supplier: addresSupplier,
-      phone_supplier: phoneSupplier,
-      id_type_supplier: idTypeSupplier
-    } = res.body
-
-    const responseDB = await consults.consults_supplier(
-      nameSupplier,
-      emailSupplier,
-      nitSupplier
-    )
-
-    if (responseDB.length === 1) {
-      response.error(res, 'Supplier already exists', 400)
-    }
-
-    const responseDBCreate = await consults.createUserSupplier(
-      nameSupplier,
-      nitSupplier,
-      emailSupplier,
-      idCountrySupplier,
-      addresSupplier,
-      phoneSupplier,
-      idTypeSupplier
-    )
-
-    response.success(res, 'Supplier created', responseDBCreate)
-  } catch (error) {
-    response.error(res, error.message)
-  }
-}
-
-export { registryUserClient, registryOtherUserType, registrySupplierUser }
+export { registryUserClient, registryOtherUserType }

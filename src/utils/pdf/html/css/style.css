@@ -1,0 +1,32 @@
+/* Definir la fuente personalizada */
+@font-face {
+  font-family: 'FontsPlanni';
+  src: url('../fonts/MPLUSRounded1c-Regular.woff2') format('woff2');
+}
+
+
+body {
+  font-family: 'FonstPlanni', Arial, sans-serif;
+  margin: 50px;
+  padding: 0;
+}
+
+.container {
+  position: relative;
+}
+
+.logo {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  width: 100px;
+  height: auto;
+}
+
+.text {
+  position: absolute;
+  top: 40px;
+  left: 130px;
+  color: red;
+  font-size: 24px;
+}

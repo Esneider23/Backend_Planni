@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { signIn } from './controller.js'
+import { signInNew } from './controller.js'
 
 const signInRouter = Router()
 
-signInRouter.post('/', signIn)
+signInRouter.post('/', signInNew)
 
 export { signInRouter }
