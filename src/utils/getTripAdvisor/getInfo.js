@@ -4,9 +4,12 @@ export const getInfo = async (cityNames, contextUser) => {
   try {
     const infoTrip = await getTrip(cityNames, contextUser)
 
-    // Obtener los primeros cuatro elementos de cada categoría
-    const hotels = infoTrip.hotels.slice(0, 4)
-    const restaurants = infoTrip.restaurants.slice(0, 4)
+    // Función para mezclar una lista
+    const shuffleArray = (array) => array.sort(() => Math.random() - 0.5)
+
+    // Obtener 4 hoteles y 4 restaurantes aleatorios
+    const hotels = shuffleArray(infoTrip.hotels).slice(0, 4)
+    const restaurants = shuffleArray(infoTrip.restaurants).slice(0, 4)
 
     // Filtrar atracciones por nombre que contenga "tour"
     const attractionsWithTour = infoTrip.attractions.filter((attraction) =>

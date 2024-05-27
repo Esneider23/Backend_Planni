@@ -20,4 +20,5 @@ export const env = {
   LATLONG: process.env.LATLONG,
   MAILUSER: process.env.MAILUSER,
   MAILPASS: process.env.MAILPASS,
+  KEY_GOOGLEAI: process.env.KEY_GOOGLEAI
 }
