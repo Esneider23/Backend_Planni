@@ -161,3 +161,13 @@ export const updatePackageController = async ( req, res ) => {
       response.success(res, 'Internal error', error, 500)
     }
 }
+
+export const getHistoryController = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const deletedUser = await consults.getHistoryBuy(id)
+      res.json(deletedUser)
+    } catch (error) {
+      res.status(500).json({ message: 'Error al eliminar usuario', error: error.message })
+    }
+  }

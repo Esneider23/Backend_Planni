@@ -5,7 +5,8 @@ import { deleteUser, getUserAll, getFilterByRol,
     buysPackage,
     createPackageController,
     deletePackageController,
-    updatePackageController
+    updatePackageController,
+    getHistoryController
  } from './controller.js'
 
 const userRouter = Router()
@@ -20,5 +21,7 @@ userRouter.post('/buys', buysPackage )
 userRouter.post('/package', createPackageController)
 userRouter.delete('/package/:id', deletePackageController)
 userRouter.put('/package/:id', updatePackageController)
+userRouter.get('/history/:id', getHistoryController)
+
 
 export {userRouter}
