@@ -4,29 +4,139 @@
   src: url('../fonts/MPLUSRounded1c-Regular.woff2') format('woff2');
 }
 
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 
 body {
   font-family: 'FonstPlanni', Arial, sans-serif;
-  margin: 50px;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0;
 }
 
+.wrapper__pdf {
+  padding-bottom: 30px;
+  max-width: 700px;
+  border: 1px solid #eee;
+  border-radius: 20px;
+}
+
 .container {
-  position: relative;
+  padding: 10px 40px;
+  border-bottom: 1px solid #eee;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.logo {
-  position: absolute;
-  top: 100px;
-  left: 100px;
-  width: 100px;
-  height: auto;
+.container img {
+  width: 50px;
+  height: 50px;
 }
 
-.text {
-  position: absolute;
-  top: 40px;
-  left: 130px;
-  color: red;
-  font-size: 24px;
+.container h1 {
+  margin: 0;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.container svg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.information__container {
+  display: flex;
+  flex-direction: row;
+
+}
+
+.information__container div {
+  padding: 10px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+/*   border: 1px solid #d33c25; */
+}
+
+.information__container p{
+  margin: 0;
+}
+
+.information__container span {
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.container .id__pdf {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.container .id__pdf p{
+  text-align: end;
+  font-size: 13px;
+}
+
+.inf__turis {
+  margin: 0 30px;
+}
+
+.inf__turis .container__inf__turis {
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+  gap: 15px;
+}
+
+.container__inf__turis .info_tick,
+.info_tick {
+  width: 100%;
+}
+
+.container__inf__turis .info_tick h3,
+.info_tick h3 {
+  margin-left: 20px;
+}
+
+.container__inf__turis .info_tick div,
+.info_tick div{
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  border: 1px solid #d33c25;
+  padding: 10px;
+  border-radius: 15px;
+  font-size: 15px;
+}
+
+.container__inf__turis .info_tick div i,
+.info_tick div i{
+  font-size: 30px;
+  margin-right: 8px;
+}
+
+.inf__turis fieldset{
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: 1px solid #d33c25;
+  border-radius: 20px;
+}
+
+.inf__turis fieldset legend {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 0 20px;
 }

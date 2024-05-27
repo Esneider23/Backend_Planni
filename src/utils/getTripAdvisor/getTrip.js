@@ -8,7 +8,7 @@ const axiosConfig = {
   params: {
     key: 'AD6F25D7C72646CE876259F8D804418A',
     latLong: env.LATLONG,
-    radius: '7.9',
+    radius: '750',
     radiusUnit: 'km',
     language: 'es_CO'
   },
@@ -68,7 +68,8 @@ export const getTrip = async (cityNames, contextUser) => {
   try {
     const infoDeberta = await getActivity(cityNames, contextUser)
     const stringWords = infoDeberta.join(', ')
-    const category = ['hotels', 'restaurants', 'attractions']
+    console.log(stringWords)
+    const category = ['hotels']
 
     const results = {} // Objeto para almacenar los resultados por categoría
 
@@ -110,3 +111,11 @@ export const getDescriptionsAndImages = async (locationId) => {
     throw error
   }
 }
+
+
+(async () =>{
+  const cityNames = 'Cartagena'
+  const contextUser = ""
+  const info = await getTrip(cityNames, contextUser)
+  console.log(info)
+})(); 
