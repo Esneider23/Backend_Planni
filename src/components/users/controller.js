@@ -75,7 +75,6 @@ export const updateUser = async (req, res) => {
     }
 }
 
-
 export const buysPackage = async (req, res) => {
     const data = req.body;
 
@@ -83,31 +82,23 @@ export const buysPackage = async (req, res) => {
         const infoPackage = await consultsBuys.buysPackage(data);
         console.log('infoPackage:', infoPackage);
         const { filepath, filename } = generatePdfPath();
-        buildPdf(filepath, infoPackage, (err) => {
+        await buildPdf(filepath, infoPackage);
+
+        // Enviar el PDF por correo electrónico
+        sendEmailWithPdf(infoPackage[0].email, filepath, filename, (err, info) => {
             if (err) {
                 return res.status(500).json({
                     success: false,
-                    message: 'Error generating PDF',
+                    message: 'Error sending email',
                     error: err.message
                 });
             }
 
-            // Enviar el PDF por correo electrónico
-            sendEmailWithPdf(infoPackage[0].email, filepath, filename, (err, info) => {
-                if (err) {
-                    return res.status(500).json({
-                        success: false,
-                        message: 'Error sending email',
-                        error: err.message
-                    });
-                }
-
-                res.status(200).json({
-                    success: true,
-                    message: 'Package bought and email sent',
-                    buyIdPackage: infoPackage[0].id_buy_package,
-                    pdfUrl: `../../utils/pdf/pdfs/${filename}`
-                });
+            res.status(200).json({
+                success: true,
+                message: 'Package bought and email sent',
+                buyIdPackage: infoPackage[0].id_buy_package,
+                pdfUrl: `../../utils/pdf/pdfs/${filename}`
             });
         });
     } catch (error) {
