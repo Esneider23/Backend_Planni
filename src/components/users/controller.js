@@ -83,6 +83,7 @@ export const getFilterByUsername = async (req, res) => {
 export const updateUser = async (req, res) => {
   const { id } = req.params
   const userData = req.body
+  console.log('->> user data --->>', userData)
   try {
     const user = await consults.updateUser(id, userData)
     response.success(res, 200, user)

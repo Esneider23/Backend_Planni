@@ -194,11 +194,12 @@ const updateUser = async (id, userData) => {
     password,
     phone,
     address,
-    id_rol
+    id_rol,
+    old_email
   } = userData
   console.log(userData)
   try {
-    const existingUser = await getUser(email)
+    const existingUser = await getUser(old_email)
 
     // Validar si el email ya existe en otro usuario
     if (!existingUser.length === 1) {
