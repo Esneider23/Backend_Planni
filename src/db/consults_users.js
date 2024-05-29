@@ -196,16 +196,34 @@ const updateUser = async (id, userData) => {
     address,
     id_rol
   } = userData
+  console.log(userData)
   try {
     const existingUser = await getUser(email)
 
     // Validar si el email ya existe en otro usuario
-    if (existingUser.length === 1 && existingUser[0].id_users !== id) {
-      return 'User already exists'
+    if (!existingUser.length === 1) {
+      return 'Usuario no existe'
     }
 
     // Hashear la contraseña antes de actualizar
-    const hashedPassword = await hashPassword(password)
+    const hashedPassword =
+      password != existingUser[0].password
+        ? await hashPassword(password)
+        : password
+
+    const vals = [
+      username,
+      name_user,
+      lastname_user,
+      id_country,
+      email,
+      hashedPassword,
+      phone,
+      address,
+      id_rol,
+      id
+    ]
+    console.log(vals)
 
     const query = {
       text: 'UPDATE users SET username = $1, name_user = $2, lastname_user = $3, id_country = $4, email = $5, password = $6, phone = $7, address = $8, id_rol = $9 WHERE id_users = $10 RETURNING *',
