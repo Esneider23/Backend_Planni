@@ -77,7 +77,9 @@ const scrapeWebsite = async (cityNames, contextUser, maxBudget) => {
           restaurantInfo = {
             id_restaurant: key,
             name_restaurant: restaurantsInfo[key],
-            description_restaurant: await generateDescriptionRestaurant(restaurantsInfo[key]),
+            description_restaurant: await generateDescriptionRestaurant(
+              restaurantsInfo[key]
+            ),
             price: formattedPrice
           }
           await packagesConsults.createRestaurant(restaurantInfo)
@@ -97,33 +99,43 @@ const scrapeWebsite = async (cityNames, contextUser, maxBudget) => {
 }
 
 export const scrapeWebsiteController = async (req, res) => {
-  const { cityNames, contextUser, maxBudget } = req.body;
+  const { cityNames, contextUser, maxBudget } = req.body
 
   try {
-    const data = await scrapeWebsite(cityNames, contextUser, maxBudget);
-    const hotels = data.hotels.filter((hotel) => !hotel.error);
-    const attractions = data.attractions.filter((attraction) => !attraction.error);
-    const restaurants = data.restaurants.filter((restaurant) => !restaurant.error);
+    const data = await scrapeWebsite(cityNames, contextUser, maxBudget)
+    const hotels = data.hotels.filter((hotel) => !hotel.error)
+    const attractions = data.attractions.filter(
+      (attraction) => !attraction.error
+    )
+    const restaurants = data.restaurants.filter(
+      (restaurant) => !restaurant.error
+    )
 
-    const packages = [];
+    const packages = []
 
     for (const hotel of hotels) {
-      const hotelPackages = [];
+      const hotelPackages = []
 
       for (let i = 0; i < attractions.length; i++) {
         for (let j = i + 1; j < attractions.length; j++) {
           for (const restaurant of restaurants) {
-            const hotelPrice = parseFloat(hotel.price);
-            const attraction1Price = parseFloat(attractions[i].price_attraction);
-            const attraction2Price = parseFloat(attractions[j].price_attraction);
-            const restaurantPrice = parseFloat(restaurant.price);
+            const hotelPrice = parseFloat(hotel.price)
+            const attraction1Price = parseFloat(attractions[i].price_attraction)
+            const attraction2Price = parseFloat(attractions[j].price_attraction)
+            const restaurantPrice = parseFloat(restaurant.price)
 
-            if (isNaN(hotelPrice) || isNaN(attraction1Price) || isNaN(attraction2Price) || isNaN(restaurantPrice)) {
-              console.log('Precio inválido detectado, omitiendo paquete:');
-              continue;
+            if (
+              isNaN(hotelPrice) ||
+              isNaN(attraction1Price) ||
+              isNaN(attraction2Price) ||
+              isNaN(restaurantPrice)
+            ) {
+              console.log('Precio inválido detectado, omitiendo paquete:')
+              continue
             }
 
-            const totalPrice = hotelPrice + attraction1Price + attraction2Price + restaurantPrice;
+            const totalPrice =
+              hotelPrice + attraction1Price + attraction2Price + restaurantPrice
             if (totalPrice <= maxBudget) {
               hotelPackages.push({
                 hotel: {
@@ -156,13 +168,15 @@ export const scrapeWebsiteController = async (req, res) => {
                   price: restaurantPrice
                 },
                 totalCost: totalPrice
-              });
+              })
             }
           }
         }
       }
 
-      const cheapestPackage = hotelPackages.sort((a, b) => a.totalCost - b.totalCost)[0];
+      const cheapestPackage = hotelPackages.sort(
+        (a, b) => a.totalCost - b.totalCost
+      )[0]
       if (cheapestPackage) {
         const packageId = await packagesConsults.createPackage({
           hotelId: cheapestPackage.hotel.id,
@@ -170,46 +184,45 @@ export const scrapeWebsiteController = async (req, res) => {
           idAttraction2: cheapestPackage.attractions[1].id,
           restaurantId: cheapestPackage.restaurant.id,
           pricePackage: cheapestPackage.totalCost
-        });
-        
+        })
+
         packages.push({
           id_package: packageId,
           ...cheapestPackage
-        });
+        })
       }
     }
-    response.success(res, 'packages', packages);
+    response.success(res, 'packages', packages)
   } catch (error) {
-    response.error(res, 'Error: ', error);
+    response.error(res, 'Error: ', error)
   }
-};
-
+}
 
 export const getPackage = async (req, res) => {
-  const { id } = req.params; 
+  const { id } = req.params
 
   try {
-    const idPackage = parseInt(id, 10);
+    const idPackage = parseInt(id, 10)
     if (isNaN(idPackage)) {
-      return response.error(res, 'Invalid package ID');
+      return response.error(res, 'Invalid package ID')
     }
 
-    const packages = await packagesConsults.getPackage(idPackage);
+    const packages = await packagesConsults.getPackage(idPackage)
     if (!packages) {
-      return response.error(res, 'Package not found');
+      return response.error(res, 'Package not found')
     }
 
-    response.success(res, 'Packages fetched successfully', packages);
+    response.success(res, 'Packages fetched successfully', packages)
   } catch (error) {
-    response.error(res, 'Error fetching package', error);
+    response.error(res, 'Error fetching package', error)
   }
-};
+}
 
 export const getPackages = async (req, res) => {
   try {
-    const packages = await packagesConsults.getpackages();
-    response.success(res, 'Packages fetched successfully', packages);
+    const packages = await packagesConsults.getpackages()
+    response.success(res, 'Packages fetched successfully', packages)
   } catch (error) {
-    response.error(res, 'Error fetching packages', error);
+    response.error(res, 'Error fetching packages', error)
   }
 }
